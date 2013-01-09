@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+	    <meta charset="utf-8"/>
+	    
+	    <title>ChartGen</title>
+
+	    <!-- application dependencies -->
+	    
+	    <link rel="stylesheet" type="text/css" href="styles.css">
+	    
+	    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+
+	    <script src="js/datatable.js"></script>
+	    <script src="js/utils.js"></script>
+	    
+	    <!-- application -->
+	    <script src="application.js"></script>
+
+	    <!-- plugin dependencies -->
+	    
+	    <script src="js/benignware/core-bundle-1.4.js"></script>
+	    
+	    <!-- plugins -->
+	    <script src="provider/benignware/benignware-support.js"></script>
+	   	<script src="provider/d3/d3-support.js"></script>
+	    
+	    
+	</head>
+	<body>
+		
+		<h1>SVG-Chart Builder</h1>
+		
+		<form id="chart-form" onsubmit="event.preventDefault(); return false;">
+			
+			<table>
+				<tr>
+					<th>Title</th>
+					<td>
+						<input name="title" size="50"/>
+					</td>
+				</tr>
+				<tr>
+					<th>Data Source Url</th>
+					<td>
+						<div id="data-source-url-options">
+							<input id="data-source-url-input" name="dataSourceUrl"/>
+							<button type="button" onclick="loadDataSource()">Import</button>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>Data Source Format</th>
+					<td>
+						<input id="data-source-format-first-row-checkbox" name="dataSourceFormat[firstRowAsColumnLabels]" type="checkbox" checked="checked"/>
+						<label for="data-source-format-first-row-checkbox">First row as column labels</label>
+						<div id="data-source-format-options"></div>
+					</td>
+				</tr>
+				<tr>
+					<th>Provider</th>
+					<td>
+						<select id="provider-select" name="provider"></select>
+					</td>
+				</tr>
+				<tr>
+					<th>Type</th>
+					<td>
+						<select name="type">
+							<option value="line">LineChart</option>
+							<option value="column">ColumnChart</option>
+							<option value="bar">BarChart</option>
+							<option value="pie">PieChart</option>
+							<option value="table">TableChart</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Legend</th>
+					<td>
+						<select name="legend">
+							<option value="right">right</option>
+							<option value="top">top</option>
+							<option value="left">left</option>
+							<option value="bottom">bottom</option>
+							<option value="none">none</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Series Colors</th>
+					<td>
+						<input name="seriesColors"/>
+					</td>
+				</tr>
+				<tr>
+					<th>Preview</th>
+					<td>
+						<div id="chart-preview"></div>
+					</td>
+				</tr>
+				<tr>
+					<th>Embed</th>
+					<td>
+						<textarea id="embed"></textarea>
+					</td>
+				</tr>
+			</table>
+
+		</form>
+		
+	</body>
+</html>

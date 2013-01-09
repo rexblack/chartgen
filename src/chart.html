@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+	    <meta charset="utf-8"/>
+	    
+	    <title>BaseChart</title>
+	    
+	    <script src="js/benignware/core-bundle-1.4.js"></script>
+	    <script src="js/benignware/visualization-bundle-1.4.js"></script>
+	    
+	    <script>
+	    
+	    	function init() {
+	    		
+	    		
+	    		
+	    		var dataTable = new benignware.visualization.DataTable();
+	    		
+	    		dataTable.addColumn('string', 'Name');
+	    		dataTable.addColumn('number', 'Anteil an den Dividenden der S&P-500-Titel in %');
+
+	    		dataTable.addRow(["Informationstechnologie", 14.58]);
+	    		dataTable.addRow(["Basiskonsumgüter", 14.24]);
+	    		dataTable.addRow(["Finanzen", 12.49]);
+				dataTable.addRow(["Gesundheit", 11.79]);
+				dataTable.addRow(["Energie", 11.06]);
+				dataTable.addRow(["Industrie", 10.8]);
+	
+	    		var chart = benignware.core.Element.create(benignware.visualization.PieChart);
+	    		chart.setTitle('hello');
+	    		chart.setLegend('top');
+	    		document.body.appendChild(chart);
+	    		chart.setDataTable(dataTable);
+	    		
+	    		
+	    		
+	    		
+	    		var dataTable = new benignware.visualization.DataTable();
+	    		dataTable.addColumn('date', 'Datum');
+	    		dataTable.addColumn('number', 'Test f f  f fsjkjdksld sdsdsd jdsj sdffjf jfj jf jf');
+
+	    		dataTable.addRow([new Date('2008/5/5'), 10]);
+	    		dataTable.addRow([new Date('2009/5/5'), 20]);
+	    		dataTable.addRow([new Date('2010/5/5'), 30]);
+	    		dataTable.addRow([new Date('2011/5/5'), 23]);
+	    		
+	    		var chart = benignware.core.Element.create(benignware.visualization.LineChart);
+	    		chart.setLegend('right');
+	    		chart.setTitle('hello');
+	    		document.body.appendChild(chart);
+	    		chart.setDataTable(dataTable);
+
+
+
+// 
+// Mongolian Stock Exchange (1,6)	1,6
+// Uganda Stock Exchange (4)	4
+// Bolsa de Volares de Colombia	251,3
+// Deutsche Börse Frankfurt	1293,7
+// New York Stock Exchange	14242
+
+				var dataTable = new benignware.visualization.DataTable();
+	    		dataTable.addColumn('string', null);
+	    		dataTable.addColumn('number', 'Marktkapitalisierung der gelisteten Unternehmen in Mrd. USD');
+	    		
+	    		dataTable.addRow(["Mongolian Stock Exchange (1,6)", 1.6]);
+	    		dataTable.addRow(["Uganda Stock Exchange (4)", 4]);
+	    		dataTable.addRow(["Bolsa de Volares de Colombia", 251.3]);
+	    		dataTable.addRow(["Deutsche Börse Frankfurt", 1293.7]);
+				dataTable.addRow(["New York Stock Exchange", 14242]);
+				
+				var chart = benignware.core.Element.create(benignware.visualization.TableChart);
+	    		// chart.setLegend('top');
+	    		document.body.appendChild(chart);
+	    		chart.setDataTable(dataTable);
+				
+				
+// Date	Nettomittelzuflüsse, 2012 bis 30.09. In Mrd. Euro.
+// 31.12.2008	5,5
+// 31.12.2009	3,2
+// 31.12.2010	2,4
+// 31.12.2011	0,9
+// 30.09.2012	2,8
+
+				var dataTable = new benignware.visualization.DataTable();
+	    		dataTable.addColumn('number', 'Date');
+	    		dataTable.addColumn('number', 'Nettomittelzuflüsse, 2012 bis 30.09. In Mrd. Euro.');
+	    		
+	    		dataTable.addRow([2008, 5.5]);
+	    		dataTable.addRow([2009, 3.2]);
+	    		dataTable.addRow([2010, 2.4]);
+	    		dataTable.addRow([2011, 0.9]);
+	    		dataTable.addRow([2012, 2.8]);
+	    		
+	    		
+	    		var chart = benignware.core.Element.create(benignware.visualization.ColumnChart);
+	    		chart.setLegend('top');
+	    		document.body.appendChild(chart);
+	    		chart.setDataTable(dataTable);
+	    		
+	    		
+
+// Aktien Deutschland	26,8	2,5
+// Hochzins-Unternehmensanleihen	25,3	2,5
+// Staatsanleihen Peripherie	16,9	2,5
+// Investment-Grade-Unternehmensanleihen	12,4	2,5
+// Pfandbriefe	10	2,5
+// Termingeld	1,8	2,5
+
+
+				// columnchart
+				var dataTable = new benignware.visualization.DataTable();
+	    		dataTable.addColumn('string', 'Name');
+	    		dataTable.addColumn('number', 'Wertentwicklung seit Jahresanfang 2012 in %*');
+	    		dataTable.addColumn('number', '2,5 % Inflation');
+
+	    		dataTable.addRow(["Aktien Deutschland", 26.8, 2.5]);
+	    		dataTable.addRow([" Hochzins- Unternehmensanleihen", 25.3, 2.5]);
+	    		dataTable.addRow(["Investment- Grade- Unternehmens- anleihen", 12.4, 2.5]);
+				dataTable.addRow(["Pfandbriefe", 10, 2.5]);
+				dataTable.addRow(["Termingeld", 1.8, 2.5]);
+	    			    		
+	    		var chart = benignware.core.Element.create(benignware.visualization.ColumnChart);
+	    		chart.setLegend('top');
+	    		document.body.appendChild(chart);
+	    		chart.setDataTable(dataTable);
+	    		
+	    		
+	    		
+	    			// Anteil an den Dividenden der S&P-500-Titel in %
+// Informationstechnologie	14,58
+// Basiskonsumgüter	14,24
+// Finanzen	12,49
+// Gesundheit	11,79
+// Energie	11,06
+// Industrie	10,8
+// Nicht-Basiskonsumgüter	7,9
+// Telekommunikation	6,59
+	    		
+	    		
+	    		
+	    		
+	    		
+	    		// 4,25% Bundesanleihe (07/2018) AAA	0,54
+// 1,5% BASF (10/2018) A+	1,04
+// 6,25% Franz Haniel (02/2018) BB	3,97
+// 4,5% ArcelorMittal (03/2018) BB+	4,86
+// 6,0% EDP (02/2018) BB+	5,31
+// 7,0% US Steel Corp (02/2018) BB	6,57
+	    			    		
+	    			    		
+	    		var dataTable = new benignware.visualization.DataTable();
+	    		
+	    		dataTable.addColumn('string', 'Name');
+	    		dataTable.addColumn('number', 'Rendite in % p.a.');
+
+	    		dataTable.addRow(["4,25% Bundesanleihe (07/2018) AAA", 0.548]);
+	    		dataTable.addRow(["1,5% BASF (10/2018) A+", 1.04]);
+	    		dataTable.addRow(["6,25% Franz Haniel (02/2018) BB", 3.97]);
+				dataTable.addRow(["4,5% ArcelorMittal (03/2018) BB+", 4.86]);
+				dataTable.addRow(["6,0% EDP (02/2018) BB+", 5.31]);
+				dataTable.addRow(["7,0% US Steel Corp (02/2018) BB", 6.57]);
+	
+	    		var chart = benignware.core.Element.create(benignware.visualization.ColumnChart);
+	    		chart.setLegend('top');
+	    		document.body.appendChild(chart);
+	    		chart.setDataTable(dataTable);
+	    	}
+	    </script>
+	</head>
+	<body onload="init();">
+		
+		<h1>Chart</h1>
+		
+	</body>
+</html>

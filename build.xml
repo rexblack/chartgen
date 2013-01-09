@@ -1,0 +1,24 @@
+<project name="FeedMag" default="build">
+	
+	<property name="author" value="Rafael Nowrotek"/>
+	<property name="company" value="benignware.com"/>
+	
+	<property file="build.properties" />
+	
+	<target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+   <target name="build">
+		
+		<mkdir dir="${build.dir}" />
+
+		<copy todir="${build.dir}">
+	   	    <fileset dir="${src.dir}">
+	   	    </fileset>
+	   	</copy>
+   	
+    </target> 
+  
+
+</project>

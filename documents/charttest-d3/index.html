@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+</style>
+
+
+
+<body>
+<script src="d3.v3.js"></script>
+
+<div id="editor">
+  <input value="960" id="chartwidth" type="text" size="10" maxlength="10" onchange="drawChart()">
+  <input value="300" id="chartheight" type="text" size="10" maxlength="10" onchange="drawChart()">
+	<button onclick="drawChart()">
+        Draw
+      </button>
+
+</div>
+
+<div id="chart"></div>
+
+<script src="simpleline.js"></script>
+</body>

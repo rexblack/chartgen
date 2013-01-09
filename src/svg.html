@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		
+		<script src="js/benignware/core-bundle-1.4.js"></script>
+	    <script src="js/benignware/visualization-bundle-1.4.js"></script>
+	    
+	    <script>
+			
+			function init() {
+				
+				var SVGUtils = benignware.visualization.SVGUtils;
+				
+				var svg = SVGUtils.create(document, {
+					width: 600, 
+					height: 400
+				});
+				
+				document.body.appendChild(svg);
+				
+				var g = SVGUtils.createElement(document, 'g');
+				g.setAttribute('transform', 'translate(200, 300)');
+				svg.appendChild(g);
+				
+				var size = SVGUtils.renderList(g, [{label: 'Hallo Halli Hallulullu rw eoi rweoripwre'}, {label: 'tes testts', bullet: {type: 'rect', style: {fill: '#88eeff'}}}], 50, {direction: 'vertical', bullet: {type: 'circle'}});
+			}
+			
+		</script>
+	</head>
+	
+	<body onload="init()">
+		
+		
+		
+		
+		
+		
+		
+		
+		<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 500 300" style="position: absolute;" version="1.1" class="chart-gfx"><g transform="translate(50, 50)"><g transform="translate(320, 0)"><text y="-4" x="12"><tspan dy="1em" x="12">Umlaufrendite</tspan><tspan dy="1em" x="12">in %</tspan></text><rect fill="rgb(0, 0, 255)" height="7" width="7" y="1.5" x="0"></rect></g><g transform=""><g><text y="193" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">0.00</tspan></text><text y="173" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">1.00</tspan></text><text y="153" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">2.00</tspan></text><text y="133" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">3.00</tspan></text><text y="113" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">4.00</tspan></text><text y="93" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">5.00</tspan></text><text y="73" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">6.00</tspan></text><text y="53" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">7.00</tspan></text><text y="33" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">8.00</tspan></text><text y="13" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">9.00</tspan></text><text y="-7" x="-10" text-anchor="end" font-size="12px"><tspan dy="1em" x="">10.00</tspan></text><text y="210" x="13" text-anchor="middle" font-size="12px"><tspan dy="1em" x="">01.01.90</tspan></text><text y="210" x="148" text-anchor="middle" font-size="12px"><tspan dy="1em" x="">01.01.00</tspan></text><text y="210" x="283" text-anchor="middle" font-size="12px"><tspan dy="1em" x="">01.01.10</tspan></text></g><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="200" y1="200" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="180" y1="180" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="160" y1="160" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="140" y1="140" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="120" y1="120" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="100" y1="100" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="80" y1="80" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="60" y1="60" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="40" y1="40" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="20" y1="20" x2="310" x1="0"></line><line class="grid-line horizontal-grid" stroke-width="1" stroke="#afafaf" y2="0" y1="0" x2="310" x1="0"></line><line class="grid-line vertical-grid" stroke-width="1" stroke="#afafaf" y2="200" y1="0" x2="13" x1="13"></line><line class="grid-line vertical-grid" stroke-width="1" stroke="#afafaf" y2="200" y1="0" x2="148" x1="148"></line><line class="grid-line vertical-grid" stroke-width="1" stroke="#afafaf" y2="200" y1="0" x2="283" x1="283"></line><path fill="none" stroke-width="1" stroke="rgb(0, 0, 255)" d="M310 195 L303 200 L298 185 L297 176 L291 154 L286 160 L285 164 L278 170 L273 146 L272 152 L266 142 L261 151 L260 148 L253 114 L248 117 L247 122 L241 114 L236 126 L235 132 L229 127 L223 142 L222 142 L216 148 L211 139 L210 138 L204 125 L199 126 L197 121 L191 137 L186 126 L185 118 L179 99 L174 108 L173 116 L166 100 L161 106 L160 100 L154 96 L149 95 L148 101 L141 128 L136 134 L135 129 L129 109 L124 99 L123 96 L117 96 L111 94 L110 99 L104 80 L99 89 L98 86 L92 68 L87 38 L85 46 L79 57 L74 90 L73 86 L67 58 L62 49 L61 44 L54 22 L49 19 L48 12 L42 17 L37 0 L36 4 L29 4 L24 32 L23 36 L17 49 L12 67 L11 71 L5 73 L0 80 "></path></g></g></svg>
+	</body>
+</html>
