@@ -315,14 +315,29 @@
 	
 	var Class = benignware.core.Class;
 
+	/**
+	 * SVG utility functions
+	 * @class benignware.visualization.SVGUtils
+	 */
 	function SVGUtils() {
 				
 	}
 	
 	Class.register('benignware.visualization.SVGUtils', SVGUtils);
 			
+	/**
+	 * @field SVG_NAMESPACE
+	 * @return {String} http://www.w3.org/2000/svg
+	 */
 	SVGUtils.SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 	
+	/**
+	 * creates an svg canvas
+	 * @static
+	 * @method create
+	 * @param {Document} doc the document, where the node should be created on
+	 * @param {Object} attributes an object containing keys and values
+	 */
 	SVGUtils.create = function(doc, attributes) {
 		var svg = doc.createElementNS(SVGUtils.SVG_NAMESPACE, "svg");
 		svg.setAttribute('version', "1.1");
@@ -330,12 +345,27 @@
 		return svg;
 	}
 	
+	/**
+	 * creates an svg element
+	 * @static
+	 * @method createElement
+	 * @param {Document} doc the document, where the node should be created on
+	 * @param {String} tagName the element's type
+	 * @param {Object} attributes an object containing keys and values
+	 */
 	SVGUtils.createElement = function(doc, tagName, attributes) {
 		var elem = doc.createElementNS(SVGUtils.SVG_NAMESPACE, tagName);
 		for (var x in attributes) elem.setAttribute(x, attributes[x]);
 		return elem;
 	}
 	
+	
+	/**
+	 * removes all childnodes from the specified svg element.
+	 * @static
+	 * @method clear
+	 * @param {Element} svg the element that should be cleared
+	 */
 	SVGUtils.clear = function(svg) {
 		var svgChildren = svg.childNodes;
 		for (var i = 0; i < svgChildren.length; i++) {
@@ -344,6 +374,12 @@
 		}
 	}
 	
+	/**
+	 * measures the line height on the specified svg text element
+	 * @static
+	 * @method getLineHeight
+	 * @param {Element} svg the element
+	 */
 	SVGUtils.getLineHeight = function(svg) {
 		var test = svg.ownerDocument.createTextNode("A");
 		svg.appendChild(test);
@@ -353,6 +389,13 @@
 		return em;
 	}
 	
+	/**
+	 * renders lines of text to an svg text elements. 
+	 * @param {Element} svg the svg text element
+	 * @param {String} string the text that should be rendered
+	 * @param {Number} width the width to wrap at
+	 * @return {Object} an object containing size dimensions
+	 */
 	SVGUtils.renderText = function(svg, string, width) {
 		
 		if (typeof string != 'string') return string;
@@ -413,6 +456,12 @@
 	}
 	
 	
+	/**
+	 * returns the bounding box of an svg text element.  
+	 * @static
+	 * @method getBBox
+	 * @param {Element} svg the svg text element
+	 */
 	SVGUtils.getBBox = function(svg) {
 		try {
 			return svg.getBBox();
@@ -421,6 +470,15 @@
 		}
 	}
 	
+	/**
+	 * renders a list with colored bullets and labels. set options.direction = 'horizontal' to create an horizontal list. defaults to vertical.
+	 * @static
+	 * @method renderList
+	 * @param {Element} svg the svg-layer
+	 * @param {Array} items an array containing labels and style options
+	 * @param {Number} width the desired width of the list
+	 * @param {Object} options an object containing options. 
+	 */
 	SVGUtils.renderList = function(svg, items, width, options) {
 		
 		options = options || {};
@@ -512,12 +570,19 @@
 })();
 (function() {
 	
+	
+	/**
+	 * the benignware visualization package contains chart modules for the basic chart types.
+	 * @package benignware.visualization
+	 */
+	
 	var Class = benignware.core.Class;
 	var Element = Class.require("benignware.core.Element");
 	var Component = Class.require("benignware.core.Component");
 	var Event = Class.require("benignware.core.Event");
 	var Delegate = Class.require("benignware.util.Delegate");
 	var StringUtils = Class.require("benignware.util.StringUtils");
+	var ArrayUtils = Class.require("benignware.util.ArrayUtils");
 	var CSS = Class.require("benignware.util.CSS");
 	
 	var DataTable = Class.require("benignware.visualization.DataTable");
@@ -539,7 +604,7 @@
     CSS.setDefaultStyle(".benignware-visualization-BaseChart .chart-color-8", "color", "gray");
     
     /**
-	 * base class for cartesian chart
+	 * base class for all charts of the library.
 	 * @class benignware.visualization.BaseChart  
 	 */
     
@@ -551,6 +616,12 @@
 		
 		var _dataTable = null;
 		
+		/**
+		 * sets the data-table for this component
+		 * @privileged
+		 * @method setDataTable
+		 * @param {DataTable} dataTable the data-table instance
+		 */
 		this.setDataTable = function(dataTable) {
 			if (dataTable.columns && dataTable.rows) {
 				dataTable = new DataTable(dataTable);
@@ -559,21 +630,86 @@
 			this.invalidate();
 		}
 		
+		/**
+		 * retrieves the data-table for this component
+		 * @privileged
+		 * @method getDataTable
+		 * @return {DataTable} dataTable the data-table object
+		 */
 		this.getDataTable = function() {
 			return _dataTable || new DataTable();
 		}
 
-		// title
-		var _title = null;
+
+		var _datePattern = 'MM/dd/yyyy';
+		/**
+		 * sets the component's date-format pattern. defaults to 'MM/dd/yyyy'.
+		 * @privileged
+		 * @method setDatePattern
+		 * @param {String} datePattern a date-format pattern.
+		 */
+		this.setDatePattern = function(datePattern) {
+			if (datePattern != _datePattern) {
+				_datePattern = datePattern;
+				this.invalidate();
+			}
+		}
 		
+		/**
+		 * returns the chart's default date-format pattern.
+		 * @privileged
+		 * @method getDatePattern
+		 * @return {String} the chart's default date-format pattern
+		 */
+		this.getDatePattern = function() {
+			return _datePattern;
+		}
+		
+		var _numberPattern = '#.##';
+		/**
+		 * sets the chart's default number-format pattern. defaults to '#.##'.
+		 * @privileged
+		 * @method setNumberPattern
+		 * @param {String} numberPattern a number-format pattern
+		 */
+		this.setNumberPattern = function(numberPattern) {
+			if (numberPattern != _numberPattern) {
+				_numberPattern = numberPattern;
+				this.invalidate();
+			}
+		}
+		
+		/**
+		 * returns the chart's default number-format pattern.
+		 * @privileged
+		 * @method getNumberPattern
+		 * @return {String} the chart's default number-format pattern
+		 */
+		this.getNumberPattern = function(numberPattern) {
+			return _numberPattern;
+		}
+		
+
+		var _title = null;
+		/**
+		 * sets the title for the chart
+		 * @privileged
+		 * @method setTitle
+		 * @param {String} title the chart's title
+		 */
 		this.setTitle = function(title) {
 			if (title != _title) {
 				_title = title;
 				this.invalidate();
 			}
-			
 		}
 		
+		/**
+		 * returns the title of the chart
+		 * @privileged
+		 * @method getTitle
+		 * @return {String} title the chart's title
+		 */
 		this.getTitle = function() {
 			if (_title) {
 				return _title;
@@ -581,15 +717,27 @@
 			return null;
 		}
 		
-		// category key
+
 		
 		var _categoryIndex = undefined;
-		
+		/**
+		 * specifies index of the chart's category column
+		 * @privileged
+		 * @method setCategoryIndex
+		 * @param {Number} categoryIndex the category column index
+		 */
 		this.setCategoryIndex = function(categoryIndex) {
-			_categoryIndex = categoryIndex;
-			this.invalidate();
+			if (_categoryIndex != this.getCategoryIndex()) {
+				_categoryIndex = categoryIndex;
+				this.invalidate();
+			}
 		}
 		
+		/**
+		 * @privileged
+		 * @method getCategoryIndex
+		 * @return {Number} the category column index
+		 */
 		this.getCategoryIndex = function() {
 			if (typeof _categoryIndex != 'undefined') {
 				return _categoryIndex;
@@ -597,20 +745,14 @@
 			return 0;
 		}
 		
-		// colors
 		
-		var _seriesColors = null;
-		var _cssSeriesColors = null;
-		
-		this.setSeriesColors = function(colors) {
-//			if (typeof colors == "string") {
-//				
-//			}
-			_chartColors = colors;
-			this.invalidate();
-		}
-		
-		this.setSeriesColumnIndices = function() {
+		/**
+		 * returns the chart's series column indices based on exclusion of the category column.
+		 * @privileged
+		 * @method getSeriesColumnIndices
+		 * @return {Array} an array containing column indices 
+		 */
+		this.getSeriesColumnIndices = function() {
 			var dataTable = this.getDataTable();
 			var categoryIndex = this.getCategoryIndex();
 			var result = [];
@@ -624,11 +766,43 @@
 			return result;
 		}
 		
+		// colors
 		
-		this.getSeriesColors = function(colors) {
+		var _seriesColors = [];
+		var _cssSeriesColors = null;
+		
+		/**
+		 * defines the colors of the chart's series.
+		 * @privileged
+		 * @method setSeriesColors
+		 * @param {Array} colors an array containing css color values 
+		 */
+		this.setSeriesColors = function(colors) {
+			
+			if (typeof(colors) == "string") {
+				colors = ArrayUtils.filter(colors.split(","), function(obj) {
+					return StringUtils.trim(obj);
+				});
+			}
+			
+			if (_seriesColors != colors) {
+				_seriesColors = colors;
+				this.invalidate();
+			}
+		}
+		
+		/**
+		 * returns the chart's series colors. if not explicitly set, default values will be returned.
+		 * @privileged
+		 * @method getSeriesColors
+		 * @return {Array} an array containing css color values.
+		 */
+		this.getSeriesColors = function() {
+			
 			var chartElem = this;
 			
-			return _seriesColors || (function() {
+			var defaultColors = (function() {
+				
 				if (_cssSeriesColors) {
 					return _cssSeriesColors;
 				}
@@ -649,8 +823,11 @@
 				}
 				chartElem.removeChild(divElem);
 				return _cssSeriesColors;
-			})() || [];
-			chartElem.invalidate();
+			})();
+			
+			var colors = ArrayUtils.merge(defaultColors, _seriesColors);
+			
+			return colors;
 		}
 	}
 	
@@ -659,6 +836,12 @@
 	Class.extend(Component, BaseChart);
 	_parent = Class.getParent(BaseChart);
 
+	/**
+	 * formats a value based on its variable type and the specified pattern.
+	 * @static
+	 * @method getFormattedValue
+	 * @return {String} the formatted value
+	 */
 	BaseChart.getFormattedValue = function(value, pattern) {
 		switch (typeof value) {
 			case 'number':
@@ -674,19 +857,21 @@
 		return value;
 	}
 	
-	BaseChart.prototype._initialize = function(options) {
-		_parent._initialize.apply(this, arguments);
-	}
-	
-	BaseChart.prototype._createChildren = function() {
-		_parent._createChildren.apply(this, arguments);
-	}
-	
+	/**
+	 * calls the components's render method
+	 * @protected
+	 * @method _update
+	 */
 	BaseChart.prototype._update = function() {
 		// render
 		this._render();
 	}
 	
+	/**
+	 * hook in here for the chart's rendering implementation.
+	 * @protected
+	 * @method _render
+	 */
 	BaseChart.prototype._render = function() {
 	}
 	
@@ -714,7 +899,7 @@
     CSS.setDefaultStyle(".benignware-visualization-VisualChart", "height", "400px");
 
     /**
-	 * base class for cartesian chart
+	 * base class for all graphical charts
 	 * @class benignware.visualization.VisualChart  
 	 */
     
@@ -724,6 +909,12 @@
 
 		var _legend = 'right';
 		
+		/**
+		 * sets legend position. can be one the following: top, right, bottom, left or none. defaults to right.
+		 * @privileged
+		 * @method setLegend 
+		 * @param {String} position the chart legend's position
+		 */
 		this.setLegend = function(position) {
 			if (position != _legend) {
 				_legend = position;
@@ -731,6 +922,12 @@
 			}
 		}
 		
+		/**
+		 * returns the chart legend's position
+		 * @privileged
+		 * @method getLegend
+		 * @return {String} the chart legend's position
+		 */
 		this.getLegend = function() {
 			if (_legend) {
 				return _legend;
@@ -739,6 +936,33 @@
 		}
 		
 	}
+	
+	
+	/**
+	 * @field LEGEND_TOP
+	 * @return {String} top
+	 */
+	VisualChart.LEGEND_TOP = "top";
+	/**
+	 * @field LEGEND_RIGHT
+	 * @return {String} right
+	 */
+	VisualChart.LEGEND_RIGHT = "right";
+	/**
+	 * @field LEGEND_BOTTOM
+	 * @return {String} bottom
+	 */
+	VisualChart.LEGEND_BOTTOM = "bottom";
+	/**
+	 * @field LEGEND_LEFT
+	 * @return {String} left
+	 */
+	VisualChart.LEGEND_LEFT = "left";
+	/**
+	 * @field LEGEND_NONE
+	 * @return {String} none
+	 */
+	VisualChart.LEGEND_NONE = "none";
 	
 	Class.register("benignware.visualization.VisualChart", VisualChart);
 	
@@ -778,11 +1002,12 @@
 		
 	}
 	
-	VisualChart.prototype._update = function() {
-		// render
-		this._render();
-	}
-	
+	/**
+	 * builds the legend's items. override this method to customize items.
+	 * @protected
+	 * @method _buildLegendItems
+	 * @return {Array} an array containing legend items
+	 */
 	VisualChart.prototype._buildLegendItems = function() {
 		var items = [];
 		var categoryIndex = this.getCategoryIndex();
@@ -808,16 +1033,21 @@
 		return items;
 	}
 	
-	/**
-	 * implement chart rendering here. called by the VisualChart::_render method.
-	 */
-	VisualChart.prototype._renderChart = function(chartWidth, chartHeight) {
-	}
 	
+	/**
+	 * returns the margin of the chart's main layer. 
+	 * @method getChartMargin
+	 * @return {Object} an object containing left, top, bottom and right.
+	 */
 	VisualChart.prototype.getChartMargin = function() {
 		return {left: 110, top: 90, bottom: 90, right: 110};
 	}
 	
+	/**
+	 * returns the size of the chart's main layer.
+	 * @method getChartSize
+	 * @return {Object} an object containing width and height. 
+	 */
 	VisualChart.prototype.getChartSize = function() {
 		var size = this.getSize();
 		var margin = this.getChartMargin();
@@ -825,6 +1055,16 @@
 			width: size.width - margin.left - margin.right, 
 			height: size.height - margin.top - margin.bottom
 		}
+	}
+	
+	
+	/**
+	 * renders the chart's main layer
+	 * @protected
+	 * @method _renderChart
+	 */
+	VisualChart.prototype._renderChart = function() {
+		
 	}
 	
 	VisualChart.prototype._render = function() {
@@ -1020,7 +1260,7 @@
 //    CSS.setDefaultStyle(".benignware-visualization-CartesianChart .axis-label", "font-size", "12px");
 
     /**
-	 * base class for cartesian chart
+	 * base class for all cartesian charts
 	 * @class benignware.visualization.CartesianChart  
 	 */
     
@@ -1028,37 +1268,24 @@
 		
 		_parent.apply(this, arguments);
 		
-		var _dateFormat = 'MM/dd/yyyy';
-		
-		this.setDateFormat = function(dateFormat) {
-			_dateFormat = dateFormat;
-			this.invalidate();
-		}
-		
-		this.getDateFormat = function(dateFormat) {
-			return _dateFormat;
-		}
-		
-		var _numberFormat = '#.##';
-		
-		this.setNumberFormat = function(numberFormat) {
-			_numberFormat = numberFormat;
-			this.invalidate();
-		}
-		
-		this.getNumberFormat = function(numberFormat) {
-			return _numberFormat;
-		}
-		
 		
 		var _switchAxes = false;
-		
+		/**
+		 * switches the axes of the cartesian chart.
+		 * @method setSwitchAxes
+		 * @param {Boolean} bool a boolean value.
+		 */
 		this.setSwitchAxes = function(bool) {
 			_switchAxes = StringUtils.toBoolean(bool);
 			this.invalidate();
 		}
 		
-		this.getSwitchAxes = function(numberFormat) {
+		/**
+		 * returns true if axes are switched.
+		 * @method getSwitchAxes
+		 * @return {Boolean} a boolean value indicating if axes are switched
+		 */
+		this.getSwitchAxes = function() {
 			return _switchAxes;
 		}
 		
@@ -1068,10 +1295,6 @@
 	
 	Class.extend(VisualChart, CartesianChart);
 	_parent = Class.getParent(CartesianChart);
-	
-	CartesianChart.prototype._initialize = function(options) {
-		_parent._initialize.apply(this, arguments);
-	}
 	
 	CartesianChart.prototype._createChildren = function() {
 		_parent._createChildren.apply(this, arguments);
@@ -1098,7 +1321,7 @@
 	
 	
 	function getValueBounds(dataTable, columnIndices) {
-		
+
 		var min = null;
 		var max = null;
 		
@@ -1110,7 +1333,7 @@
 					
 					var value = dataTable.getCell(r, c);
 					
-					if (dataTable.getColumnType(c) == 'date') {
+					if (dataTable.getColumnType(c) == 'date' && value.getTime) {
 						// timestamp for dates
 						value = value.getTime();
 					}
@@ -1129,18 +1352,17 @@
 		
 	}
 	
-	
-	
-	CartesianChart.prototype._render = function() {
-		_parent._render.call(this);
-	}
-	
 	CartesianChart.prototype._renderChart = function(chartWidth, chartHeight) {
 		_parent._renderChart.apply(this, arguments);
 		this._renderAxes();
 	}
 	
 	
+	/**
+	 * returns the scale of the chart's category axis.
+	 * @method getCategoryScale
+	 * @return {Scale} an instance of a Scale subclass
+	 */
 	CartesianChart.prototype.getCategoryScale = function() {
 		var dataTable = this.getDataTable();
 		var switchAxes = this.getSwitchAxes();
@@ -1174,6 +1396,12 @@
 		return scale;
 	}
 	
+	
+	/**
+	 * returns the scale of the chart's value axis.
+	 * @method getValueScale
+	 * @return {Scale} an instance of a Scale subclass
+	 */
 	CartesianChart.prototype.getValueScale = function() {
 		var dataTable = this.getDataTable();
 		var switchAxes = this.getSwitchAxes();
@@ -1189,6 +1417,11 @@
 		return valueScale;
 	}
 	
+	/**
+	 * renders axes, scales and grid of the chart.
+	 * @protected
+	 * @method _renderAxes
+	 */
 	CartesianChart.prototype._renderAxes = function(chartWidth, chartHeight) {
 
 		var dataTable = this.getDataTable();
@@ -1318,7 +1551,7 @@
 				case 'date': 
 				case 'number': 
 					var value = dataTable.getColumnType(columnIndex) == 'date' ? new Date(tickValue) : tickValue;
-					var pattern = dataTable.getColumnPattern(columnIndex) || this.getDateFormat();
+					var pattern = dataTable.getColumnPattern(columnIndex) || this.getDatePattern();
 					label = BaseChart.getFormattedValue(value, pattern);
 					break;
 					
@@ -1371,7 +1604,7 @@
 					case 'date': 
 					case 'number': 
 						var value = dataTable.getColumnType(columnIndex) == 'date' ? new Date(tickValue) : tickValue;
-						var pattern = dataTable.getColumnPattern(columnIndex) || this.getDateFormat();
+						var pattern = dataTable.getColumnPattern(columnIndex) || this.getDatePattern();
 						label = BaseChart.getFormattedValue(value, pattern);
 						break;
 						
@@ -1679,7 +1912,7 @@
 		var colors = this.getSeriesColors();
 		var switchAxes = this.getSwitchAxes();
 		
-		var seriesNum = this.setSeriesColumnIndices().length;
+		var seriesNum = this.getSeriesColumnIndices().length;
 		
 		var csw = categoryScale.interval / (categoryScale.max - categoryScale.min);
 		var cw = csw / seriesNum / 2;
@@ -1793,6 +2026,7 @@
     /**
 	 * BarChart class
 	 * @class benignware.visualization.BarChart  
+	 * @extends benignware.visualization.ColumnChart
 	 */
     
 	function BarChart() {
@@ -1804,23 +2038,6 @@
 	
 	Class.extend(ColumnChart, BarChart);
 	_parent = Class.getParent(BarChart);
-
-	BarChart.prototype._initialize = function(options) {
-		_parent._initialize.apply(this, arguments);
-	}
-	
-	BarChart.prototype._createChildren = function() {
-		_parent._createChildren.apply(this, arguments);
-	}
-	
-	
-	BarChart.prototype._render = function() {
-		_parent._render.call(this);
-	}
-	
-	BarChart.prototype._renderChart = function(chartWidth, chartHeight) {
-		_parent._renderChart.apply(this, arguments);
-	}
 
 	return BarChart;
 })();
@@ -2004,9 +2221,7 @@
 	 */
     
 	function TableChart() {
-		
 		_parent.apply(this, arguments);
-		
 	}
 	
 	Class.register("benignware.visualization.TableChart", TableChart);
@@ -2015,32 +2230,34 @@
 	_parent = Class.getParent(TableChart);
 
 	
-	TableChart.prototype._initialize = function(options) {
-		_parent._initialize.apply(this, arguments);
-	}
-	
-	TableChart.prototype.tableElem = null;
+	/**
+	 * stores a reference to the component's html table element.
+	 * @protected
+	 * @property __tableElem
+	 * @return {Element} the component's html table elem.
+	 */
+	TableChart.prototype._tableElem = null;
 	
 	TableChart.prototype._createChildren = function() {
 		_parent._createChildren.apply(this, arguments);
-		this.tableElem = this.ownerDocument.createElement('table');
-		this.appendChild(this.tableElem);
+		this._tableElem = this.ownerDocument.createElement('table');
+		this.appendChild(this._tableElem);
 	}
-	
-	TableChart.prototype._update = function() {
+
+	TableChart.prototype._render = function() {
 		
 		var doc = this.ownerDocument;
 		
 		var table, tr, th, td;
 		
-		table = this.tableElem;
+		table = this._tableElem;
 		table.style.fontFamily = "Arial";
 		table.style.fontSize = "12px";
 		table.style.border = "1px solid #efefef";
 		table.style.borderCollapse = "collapse";
 		table.style.marginBottom = "1.5em";
 		
-		this.tableElem.innerHTML = "";
+		this._tableElem.innerHTML = "";
 		
 		var dataTable = this.getDataTable();
 		var title = this.getTitle();
@@ -2055,7 +2272,7 @@
 			table.appendChild(caption);
 		}
 		tr = doc.createElement('tr');
-		this.tableElem.appendChild(tr);
+		this._tableElem.appendChild(tr);
 		
 		for (var c = 0; c < dataTable.getNumberOfColumns(); c++) {
 			var label = dataTable.getColumnLabel(c);
@@ -2074,7 +2291,7 @@
 		
 		for (var r = 0; r < dataTable.getNumberOfRows(); r++) {
 			tr = doc.createElement('tr');
-			this.tableElem.appendChild(tr);
+			this._tableElem.appendChild(tr);
 			var even = r % 2;
 			for (var c = 0; c < dataTable.getNumberOfColumns(); c++) {
 				var cell = dataTable.getCell(r, c);
@@ -2104,7 +2321,6 @@
 			}
 			if (r > 25) break;
 		}
-		
 		
 	}
 	
