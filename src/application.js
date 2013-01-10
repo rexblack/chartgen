@@ -11,7 +11,10 @@
 	
 	// constants
 	
-	var serviceUrl = "http://dev.benignware.com/chartgen/service/csv.php";
+	var welcomeSourceUrl = 'welcome.csv'; 
+	
+	var serviceUrl = "service/csv.php";
+//	var serviceUrl = "http://dev.benignware.com/chartgen/service/csv.php";
 	
 	var patterns = {
 		date: ['dd.mm.yy'], 
@@ -40,21 +43,16 @@
 	});
 	
 	function init() {
-		console.log('>> init chartgen application');
 		updateProviderSelect();
 		loadDataSource();
 		var form = document.getElementById('chart-form');
 		form.onchange = function() {
-			console.log("FORM CHANGE", form);
 			renderChart();
 		}
-		console.log("parseNUMBER: ", parseNumber("-43.5", "#.##"));
 	}
 	
 	function updateProviderSelect() {
-		console.log("update prov select");
 		var providerSelect = document.getElementById('provider-select');
-		console.log("providerSelect", document, providerSelect);
 		providerSelect.innerHTML = "";
 		for (var x in providers) {
 			providerSelect.options[providerSelect.options.length] = new Option(x, x);
@@ -62,11 +60,14 @@
 	}
 	
 	window.loadDataSource = function() {
+		
 		var sourceUrlInput = document.getElementById('data-source-url-input');
 		
+		if (!sourceUrlInput.value) {
+			sourceUrlInput.value = welcomeSourceUrl;
+		}
 		var sourceUrl = sourceUrlInput.value;
-		
-		if (!sourceUrl) return;
+		console.info("loading data source '" + sourceUrl + "'...'");
 		
 		sourceUrlInput.parentNode.className = 'loading';
 		
@@ -110,7 +111,6 @@
 			var form = document.getElementById('chart-form');
 			var options = getFormObject(form);
 
-			console.log("options.dataSourceFormat: ", options.dataSourceFormat);
 			var dataTable = getDataTableFromArray(dataArray, options.dataSourceFormat);
 			
 			if (!dataTable) {
@@ -272,7 +272,7 @@
 			if (rows.length > showRows + 1 && r == showRows - 1) {
 				r = rows.length - 2;
 			}
-			console.log("R: ", r);
+			
 			if (r > 100) break;
 		}
 

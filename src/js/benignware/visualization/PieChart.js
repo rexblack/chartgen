@@ -74,8 +74,6 @@
 		
 		var svgElem = this.chartLayer;
 		
-		console.log("render chart: ", chartWidth, chartHeight);
-		
 		var radius = Math.min(chartWidth, chartHeight) / 2;
 		var x = chartWidth / 2;
 		var y = chartHeight / 2;
@@ -108,8 +106,6 @@
 				}
 			}
 		}
-		
-		console.log(values);
 		
 		var colors = this.getSeriesColors();
 		var lx = x, ly = y - radius;

@@ -5,11 +5,11 @@
 	var Loader = Class.require('benignware.core.Loader');
 	
 	// load framework
-	new Loader().load('js/benignware/visualization-bundle-1.4.js', {
-		success: function() {
-			console.log('success script loading');
-		}
-	});
+//	new Loader().load('js/benignware/visualization-bundle-1.4.js', {
+//		success: function() {
+//			console.info('benignware visualization library loaded.');
+//		}
+//	});
 	
 
 	/*
@@ -66,7 +66,6 @@
 		chartObj.setDataTable(options.dataTable);
 		chartObj.setTitle(options.title);
 		if (chartObj.setLegend) {
-			console.log("RENDER LEGEND: ", options.legend);
 			chartObj.setLegend(options.legend);
 		}
 		if (chartObj.setSeriesColors) {

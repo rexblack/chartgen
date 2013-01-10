@@ -133,8 +133,6 @@
 	}
 	
 	VisualChart.prototype._render = function() {
-
-		console.log('visual chart render');
 		
 		var dataTable = this.getDataTable();
 		
@@ -241,8 +239,6 @@
 					legendY = chartMargin.top - legendSize.height - legendMargin;
 					break;
 			}
-			
-			console.log("chart: ", legendPosition, chartX, chartY, legendSize.height);
 			
 			this.legendLayer.setAttribute("transform", "translate(" + legendX + ", " + legendY + ")");
 			

@@ -35,8 +35,6 @@
 		
 		_parent.apply(this, arguments);
 		
-		console.log("constructing base chart");
-		
 		// data table
 		
 		var _dataTable = null;
@@ -93,6 +91,9 @@
 		var _cssSeriesColors = null;
 		
 		this.setSeriesColors = function(colors) {
+//			if (typeof colors == "string") {
+//				
+//			}
 			_chartColors = colors;
 			this.invalidate();
 		}

@@ -102,10 +102,6 @@
 					var pc = (categoryValue - categoryScale.min) / (categoryScale.max - categoryScale.min);
 					var pv = (value - valueScale.min) / (valueScale.max - valueScale.min);
 
-					console.log(seriesNum, "categoryScale.interval: ", pc, categoryScale.interval);
-
-					
-					
 					var pc = pc + (csw - seriesNum * cw) / 2 + i * cw;
 					
 					var px = switchAxes ? pv : pc;

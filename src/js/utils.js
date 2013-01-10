@@ -185,8 +185,6 @@ function detectColumnType(value, pattern) {
  */
 function getDataTableFromArray(array, options) {
 	
-	console.log("get data-table from array: ", array, options);
-	
 	options = options || {};
 	options.columns = options.columns || [];
 	options.firstRowAsColumnLabels = typeof options.firstRowAsColumnLabels == 'boolean' ? options.firstRowAsColumnLabels : true;
@@ -203,7 +201,6 @@ function getDataTableFromArray(array, options) {
 		var label = firstRow ? rows[0][c] : null;
 		var pattern = columnOptions.pattern;
 		var type = columnOptions.type || detectColumnType(value, pattern);
-		console.log("data-table add column: ", type, label);
 		dataTable.addColumn(type, label, pattern);
 	}
 	

@@ -62,7 +62,7 @@
 			});
 			
 			imageLoader.onloadstart = function(event) {
-				webView.contentElem.style.display = "";
+				webView.contentElem.style.display = "none";
 				var activityView  = webView.activityView;
 				activityView.setStatus(ActivityView.STATUS_PROGRESS, webView.loadingText);
 				activityView.show();
@@ -91,7 +91,6 @@
 				this.complete = true;
 				this.dispatchEvent(Event.create(this.ownerDocument, 'complete', false, false));
 				this.dispatchEvent(Event.create(this.ownerDocument, 'contentcomplete', false, false));
-				
 			}
 			
 			this.load = function(url, options) {

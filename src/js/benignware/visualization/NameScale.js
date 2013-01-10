@@ -14,8 +14,6 @@
 	
 	function calculateNameScale(min, max, ticks, linear) {
     	
-    	console.log("calculate name scale: ", min, max, ticks, linear);
-    	
     	return {
     		interval: interval, 
     		min: min, 

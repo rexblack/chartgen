@@ -51,8 +51,6 @@
 	
 	function calculateNumericScale(min, max, ticks, linear) {
     	
-    	console.log("calculate numeric scale: ", min, max, ticks, linear);
-    	
     	if (min == max) {
     		
     		
@@ -88,13 +86,8 @@
     	nmax = max - max % interval;
 		
 		if (isNaN(nmin) || isNaN(nmax)) {
-    		
-    		alert('NAN' + ticks + "  - " + range + " - " + min + "/ " + max + " / " + interval);
     		return;
     	}
-    	
-    	
-    	console.log("scale: ", nmin, nmax, linear, min, max);
     	
     	if (linear) {
     		
@@ -109,10 +102,7 @@
         	
     	} else {
     		
-    		console.log("NOT LINEAR SCALE", nmin, min);
-    		
     		if (nmin < min) {
-    			console.log("ADD INTERVAL", nmin, min);
     			nmin+= interval;
     		}
     		if (nmax < max) {
@@ -139,9 +129,6 @@
     		min = nmin;
     		max = nmax;
     	}
-    	
-
-    	console.log("calculate scale: ", min, max);
     	
     	return {
     		interval: interval, 

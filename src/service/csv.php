@@ -4,8 +4,7 @@
  *
  * CSV-Service
  */
- 
- 
+
 function curl_get_contents($url) {
 	
 	$timeout = 300;
@@ -47,16 +46,6 @@ function curl_get_contents($url) {
 	return $data;
 }
 
-
- function read_csv($url) {
-	$rows = array();
-	$handle = fopen($url, "r");
-	while (($data = fgetcsv($handle, 5000, ",")) !== FALSE) {
-		$rows[] = $data;
-	}
-	return $rows;
-}
-
 function parse_csv($string) {
 	$handle = fopen('data://text/plain;base64,' . base64_encode($string),'r');
 	$rows = array();
@@ -83,7 +72,12 @@ switch ($format) {
 	case 'json': 
 	case 'jsonp': 
 		
-		$data = curl_get_contents($url);
+		
+		if (file_exists("../" . $url)) {
+			$data = file_get_contents("../" . $url);
+		} else {
+			$data = curl_get_contents($url);
+		}
 		$csv = parse_csv($data);
 		$json = json_encode($csv);
 		

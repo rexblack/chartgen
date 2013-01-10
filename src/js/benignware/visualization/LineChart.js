@@ -69,9 +69,8 @@
 		var categoryIndex = this.getCategoryIndex();
 		
 		var categoryScale = this.getCategoryScale();
-		
+		 
 		if (categoryScale.min == categoryScale.max) {
-			console.log("RETURN SCALE IS NOT A NUMBER");
 			return;
 		}
 		
@@ -120,16 +119,13 @@
 					}
 					
 					if (categoryValue < categoryScale.min) {
-//						console.log("smaller than scale", r);
+//						console.log("smaller than scale", r); 
 					}
 					
 					// get percent by bounds
 					var pc = (categoryValue - categoryScale.min) / (categoryScale.max - categoryScale.min);
 					var pv = (value - valueScale.min) / (valueScale.max - valueScale.min);
 
-					
-					console.log("PC: ", pc, pv, categoryValue, categoryScale.min, categoryScale.max);
-					
 					var px = pc;
 					var py = pv;
 					

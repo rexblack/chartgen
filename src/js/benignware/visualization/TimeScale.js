@@ -39,8 +39,6 @@
 
 		var minDate = new Date(minTime);
 		var maxDate = new Date(maxTime);
-		
-		console.log("calculate time scale: ", minDate, maxDate, ticks, linear);
 
 		var monthsBetween = getMonthsBetween(minDate, maxDate);
 		
@@ -50,8 +48,6 @@
 		}
 		var maxYear = maxDate.getFullYear();
 		var yearScale = new NumericScale(minYear, maxYear, ticks, linear);
-		
-		console.log("yearScale ticks: ", yearScale.ticks);
 		
 		var min = new Date("1/1/1970");
 		min.setFullYear(yearScale.min);
@@ -68,8 +64,6 @@
 			var intMonth = Math.floor(decMonth);
 			var decDay = (decMonth - intMonth) * daysInMonth(intMonth, intYear);
 			var intDay = Math.floor(decDay);
-			console.log("year: ", intYear, intMonth, decDay, intDay);
-			
 			
 			var date = new Date("1/1/1970");
 			date.setFullYear(intYear);

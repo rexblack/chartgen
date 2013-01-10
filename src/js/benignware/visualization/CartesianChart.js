@@ -211,8 +211,6 @@
 		var categoryIndex = this.getCategoryIndex();
 		var categoryType = dataTable.getColumnType(categoryIndex);
 		
-		console.log("CATTYPE: ", categoryIndex, categoryType);
-		
 		var valueIndex = categoryIndex != 0 ? 0 : 1;
 		var valueType = dataTable.getColumnType(valueIndex);
 		

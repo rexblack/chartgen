@@ -135,8 +135,6 @@
 	
 	function calculateNumericScale(min, max, ticks, linear) {
     	
-    	console.log("calculate numeric scale: ", min, max, ticks, linear);
-    	
     	if (min == max) {
     		
     		
@@ -172,13 +170,8 @@
     	nmax = max - max % interval;
 		
 		if (isNaN(nmin) || isNaN(nmax)) {
-    		
-    		alert('NAN' + ticks + "  - " + range + " - " + min + "/ " + max + " / " + interval);
     		return;
     	}
-    	
-    	
-    	console.log("scale: ", nmin, nmax, linear, min, max);
     	
     	if (linear) {
     		
@@ -193,10 +186,7 @@
         	
     	} else {
     		
-    		console.log("NOT LINEAR SCALE", nmin, min);
-    		
     		if (nmin < min) {
-    			console.log("ADD INTERVAL", nmin, min);
     			nmin+= interval;
     		}
     		if (nmax < max) {
@@ -223,9 +213,6 @@
     		min = nmin;
     		max = nmax;
     	}
-    	
-
-    	console.log("calculate scale: ", min, max);
     	
     	return {
     		interval: interval, 
@@ -281,8 +268,6 @@
 
 		var minDate = new Date(minTime);
 		var maxDate = new Date(maxTime);
-		
-		console.log("calculate time scale: ", minDate, maxDate, ticks, linear);
 
 		var monthsBetween = getMonthsBetween(minDate, maxDate);
 		
@@ -292,8 +277,6 @@
 		}
 		var maxYear = maxDate.getFullYear();
 		var yearScale = new NumericScale(minYear, maxYear, ticks, linear);
-		
-		console.log("yearScale ticks: ", yearScale.ticks);
 		
 		var min = new Date("1/1/1970");
 		min.setFullYear(yearScale.min);
@@ -310,8 +293,6 @@
 			var intMonth = Math.floor(decMonth);
 			var decDay = (decMonth - intMonth) * daysInMonth(intMonth, intYear);
 			var intDay = Math.floor(decDay);
-			console.log("year: ", intYear, intMonth, decDay, intDay);
-			
 			
 			var date = new Date("1/1/1970");
 			date.setFullYear(intYear);
@@ -566,8 +547,6 @@
 		
 		_parent.apply(this, arguments);
 		
-		console.log("constructing base chart");
-		
 		// data table
 		
 		var _dataTable = null;
@@ -624,6 +603,9 @@
 		var _cssSeriesColors = null;
 		
 		this.setSeriesColors = function(colors) {
+//			if (typeof colors == "string") {
+//				
+//			}
 			_chartColors = colors;
 			this.invalidate();
 		}
@@ -846,8 +828,6 @@
 	}
 	
 	VisualChart.prototype._render = function() {
-
-		console.log('visual chart render');
 		
 		var dataTable = this.getDataTable();
 		
@@ -954,8 +934,6 @@
 					legendY = chartMargin.top - legendSize.height - legendMargin;
 					break;
 			}
-			
-			console.log("chart: ", legendPosition, chartX, chartY, legendSize.height);
 			
 			this.legendLayer.setAttribute("transform", "translate(" + legendX + ", " + legendY + ")");
 			
@@ -1228,8 +1206,6 @@
 
 		var categoryIndex = this.getCategoryIndex();
 		var categoryType = dataTable.getColumnType(categoryIndex);
-		
-		console.log("CATTYPE: ", categoryIndex, categoryType);
 		
 		var valueIndex = categoryIndex != 0 ? 0 : 1;
 		var valueType = dataTable.getColumnType(valueIndex);
@@ -1533,9 +1509,8 @@
 		var categoryIndex = this.getCategoryIndex();
 		
 		var categoryScale = this.getCategoryScale();
-		
+		 
 		if (categoryScale.min == categoryScale.max) {
-			console.log("RETURN SCALE IS NOT A NUMBER");
 			return;
 		}
 		
@@ -1584,16 +1559,13 @@
 					}
 					
 					if (categoryValue < categoryScale.min) {
-//						console.log("smaller than scale", r);
+//						console.log("smaller than scale", r); 
 					}
 					
 					// get percent by bounds
 					var pc = (categoryValue - categoryScale.min) / (categoryScale.max - categoryScale.min);
 					var pv = (value - valueScale.min) / (valueScale.max - valueScale.min);
 
-					
-					console.log("PC: ", pc, pv, categoryValue, categoryScale.min, categoryScale.max);
-					
 					var px = pc;
 					var py = pv;
 					
@@ -1748,10 +1720,6 @@
 					var pc = (categoryValue - categoryScale.min) / (categoryScale.max - categoryScale.min);
 					var pv = (value - valueScale.min) / (valueScale.max - valueScale.min);
 
-					console.log(seriesNum, "categoryScale.interval: ", pc, categoryScale.interval);
-
-					
-					
 					var pc = pc + (csw - seriesNum * cw) / 2 + i * cw;
 					
 					var px = switchAxes ? pv : pc;
@@ -1932,8 +1900,6 @@
 		
 		var svgElem = this.chartLayer;
 		
-		console.log("render chart: ", chartWidth, chartHeight);
-		
 		var radius = Math.min(chartWidth, chartHeight) / 2;
 		var x = chartWidth / 2;
 		var y = chartHeight / 2;
@@ -1966,8 +1932,6 @@
 				}
 			}
 		}
-		
-		console.log(values);
 		
 		var colors = this.getSeriesColors();
 		var lx = x, ly = y - radius;
