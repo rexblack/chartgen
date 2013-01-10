@@ -1115,14 +1115,14 @@
 		SVGUtils.clear(this.legendLayer);
 		
 		var legendPosition = this.getLegend();
+		var legendMargin = 10;
 		
-		if (legendPosition == 'left' || legendPosition == 'right' || legendPosition == 'top' || legendPosition == 'bottom') {
+		if (legendPosition && legendPosition != 'none') {
 
 			var items = this._buildLegendItems();
-			var legendMargin = 10;
+			
 			
 			var legendDirection = legendPosition == 'right' || legendPosition == 'left' ? 'vertical' : 'horizontal';
-			
 			
 			var legendWidth;
 			
@@ -1193,7 +1193,7 @@
 		if (title != null) {
 			
 			var titleX = chartX;
-			var titleY = (legendPosition == "top" ? legendY : chartY) - legendMargin * 2;
+			var titleY = (legendPosition == "top" ? legendY : chartY) - legendMargin;
 			this.titleLayer.setAttribute("transform", "translate(" + titleX + ", " + titleY + ")");
 			
 			var titleText = this.ownerDocument.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -1205,8 +1205,6 @@
 			titleText.appendChild(titleTextNode);
 			this.titleLayer.appendChild(titleText);
 		}
-		
-		
 		
 		this.chartLayer.setAttribute("transform", "translate(" + chartX + ", " + chartY + ")");
 		

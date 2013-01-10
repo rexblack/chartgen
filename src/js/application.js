@@ -13,8 +13,8 @@
 	
 	var welcomeSourceUrl = 'welcome.csv'; 
 	
-	//var serviceUrl = "service/csv.php";
-	var serviceUrl = "http://dev.benignware.com/chartgen/service/csv.php";
+	var serviceUrl = "service/csv.php";
+	//var serviceUrl = "http://dev.benignware.com/chartgen/service/csv.php";
 	
 	var patterns = {
 		date: ['dd.mm.yy'], 
@@ -25,10 +25,12 @@
 	var showRows = 3;
 	
 	
+	
 	// variables
 	var providers = [];
 	var dataArray = null;
 	var dataTable = null;
+	var chartElement = null;
 	
 	window.registerProvider = function(id, obj) {
 		providers[id] = obj;
@@ -127,13 +129,16 @@
 			delete options.provider;
 			// render
 			
-			var chartElement = preview.ownerDocument.createElement('div');
+			chartElement = preview.ownerDocument.createElement('div');
 			preview.appendChild(chartElement);
 			
 			providerObj.renderChart(chartElement, options);
 			
-			var embed = document.getElementById('embed');
-			embed.innerHTML = chartElement.innerHTML;
+			var embed = document.getElementById('chart-embed-area');
+			if (embed) {
+				embed.innerHTML = chartElement.innerHTML;
+			}
+			
 			
 		} catch (e) {
 			preview.className = 'error';
@@ -306,9 +311,8 @@
 	}
 	
 	window.showEmbedCode = function() {
-		var preview = document.getElementById('chart-preview');
-		var embedCode = preview.innerHTML;
-		window.prompt ("Copy to clipboard: Ctrl+C, Enter", embedCode);
+		var embedCode = chartElement ? chartElement.innerHTML : "";
+		window.prompt ("Copy to clipboard: Ctrl+C and press Enter", embedCode);
 	}
 
 

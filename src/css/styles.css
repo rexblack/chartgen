@@ -6,20 +6,22 @@ body {
 td, th {
 	font-size: 12px;
 	padding: 2px;
+	vertical-align: top;
 }
 
 th {
-	background: #efefef;
 	padding: 3px 6px;
-	vertical-align: top;
+	
 }
 
 tr th:first-child {
 	text-align: right;
 }
 
-#chart-form {
+#chart-form, 
+#chart-view {
 	float: left;
+	margin-right: 20px;
 }
 
 #data-source-url-options input {
@@ -54,8 +56,13 @@ textarea {
 	margin-right: 10px;
 }
 
+#chart-embed-button {
+	float: right;
+}
+
 #chart-preview {
-	float: left;
+	border: 1px solid #efefef;
+	margin-bottom: 10px;
 }
 
 #chart-preview.error {
