@@ -5,27 +5,22 @@
 	    
 	    <title>ChartGen</title>
 
-	    <!-- application dependencies -->
-	    
-	    <link rel="stylesheet" type="text/css" href="styles.css">
-	    
-	    
 	    <!-- dependencies -->
 	    
 	    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-
-	    
-
-	   
-	      
+ 
 	    <script src="js/benignware/core-bundle-1.4.js"></script>
 	    <script src="js/benignware/visualization-bundle-1.4.js"></script>
-	      
+
+		<script src="js/d3chart/d3.v3.js"></script>
+	    <script src="js/d3chart/LineChart.js"></script>
+	
+		      
 	    <!-- application -->
 	    <script src="js/datatable.js"></script>
 	    <script src="js/utils.js"></script>
-	    <script src="application.js"></script>
+	    <script src="js/application.js"></script>
 	    
 	    
 	    
@@ -34,88 +29,106 @@
 	   	<script src="provider/d3/d3-support.js"></script>
 	    
 	    
+	    <!-- css-->
+	    <link rel="stylesheet" type="text/css" href="css/theme.css">
+	    <link rel="stylesheet" type="text/css" href="css/styles.css">
+
+	    
 	</head>
 	<body>
 		
-		<h1>SVG-Chart Builder</h1>
-		
-		<form id="chart-form" onsubmit="event.preventDefault(); return false;">
+		<div id="page">
 			
-			<table>
-				<tr>
-					<th>Title</th>
-					<td>
-						<input name="title" size="50"/>
-					</td>
-				</tr>
-				<tr>
-					<th>Data Source Url</th>
-					<td>
-						<div id="data-source-url-options">
-							<input id="data-source-url-input" name="dataSourceUrl"/>
-							<button type="button" onclick="loadDataSource()">Import</button>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<th>Data Source Format</th>
-					<td>
-						<input id="data-source-format-first-row-checkbox" name="dataSourceFormat[firstRowAsColumnLabels]" type="checkbox" checked="checked"/>
-						<label for="data-source-format-first-row-checkbox">First row as column labels</label>
-						<div id="data-source-format-options"></div>
-					</td>
-				</tr>
-				<tr>
-					<th>Provider</th>
-					<td>
-						<select id="provider-select" name="provider"></select>
-					</td>
-				</tr>
-				<tr>
-					<th>Type</th>
-					<td>
-						<select name="type">
-							<option value="line">LineChart</option>
-							<option value="column">ColumnChart</option>
-							<option value="bar">BarChart</option>
-							<option value="pie">PieChart</option>
-							<option value="table">TableChart</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>Legend</th>
-					<td>
-						<select name="legend">
-							<option value="right">right</option>
-							<option value="top">top</option>
-							<option value="left">left</option>
-							<option value="bottom">bottom</option>
-							<option value="none">none</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>Series Colors</th>
-					<td>
-						<input name="seriesColors"/>
-					</td>
-				</tr>
-				<tr>
-					<th>Preview</th>
-					<td>
+			<header id="page-header">
+				<div>
+					<h1>ChartBuilder</h1>
+					create html5 charts on the fly.
+				<div>
+			</header>
+			
+			<div id="page-content">
+				<div>
+					<form id="chart-form" onsubmit="event.preventDefault(); return false;">
+						
+						<table>
+							<tr>
+								<th>Title</th>
+								<td>
+									<input name="title" size="50"/>
+								</td>
+							</tr>
+							<tr>
+								<th>Data Source Url</th>
+								<td>
+									<div id="data-source-url-options">
+										<input id="data-source-url-input" name="dataSourceUrl"/>
+										<button type="button" onclick="loadDataSource()">Import</button>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th>Data Source Format</th>
+								<td>
+									<input id="data-source-format-first-row-checkbox" name="dataSourceFormat[firstRowAsColumnLabels]" type="checkbox" checked="checked"/>
+									<label for="data-source-format-first-row-checkbox">First row as column labels</label>
+									<div id="data-source-format-options"></div>
+								</td>
+							</tr>
+							<tr>
+								<th>Provider</th>
+								<td>
+									<select id="provider-select" name="provider"></select>
+								</td>
+							</tr>
+							<tr>
+								<th>Type</th>
+								<td>
+									<select name="type">
+										<option value="line">LineChart</option>
+										<option value="column">ColumnChart</option>
+										<option value="bar">BarChart</option>
+										<option value="pie">PieChart</option>
+										<option value="table">TableChart</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th>Legend</th>
+								<td>
+									<select name="legend">
+										<option value="right">right</option>
+										<option value="top">top</option>
+										<option value="left">left</option>
+										<option value="bottom">bottom</option>
+										<option value="none">none</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th>Series Colors</th>
+								<td>
+									<input name="seriesColors"/>
+								</td>
+							</tr>
+						</table>
+					</form>
+					
+					<section id="chart-view">
 						<div id="chart-preview"></div>
-					</td>
-				</tr>
-				<tr>
-					<th>Embed</th>
-					<td>
-						<textarea id="embed"></textarea>
-					</td>
-				</tr>
-			</table>
+						<button id="chart-embed-button" onclick="showEmbedCode()">Embed</button>
+						<div style="clear: both"></div>
+					</section>
+					
+				</div>
 
-		</form>
-		
+			</div>
+			
+			<footer id="page-footer">
+				<div>
+					<h4><a href="http://benignware.com">&lt;benignware/&gt;</a></h4>
+					nevermind.
+				</div>
+			</footer>
+		</div>
 	</body>
 </html>
