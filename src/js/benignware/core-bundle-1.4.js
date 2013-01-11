@@ -1272,7 +1272,7 @@
 		for (var i = 0; i < arguments.length; i++) {
 			var a = arguments[i];
 			for (var x in a) {
-				if (parseInt(x)) {
+				if (typeof x == "number") {
 					result.push(a[x]);
 				} else {
 					result[x] = a[x];
@@ -4154,6 +4154,11 @@
 	
 })();
 (function() {
+	
+	/**
+	 * basic geometric shapes and vector utility methods
+	 * @package benignware.geom
+	 */
 	
 	var Class = benignware.core.Class;
 	var Point = Class.require('benignware.geom.Point');
@@ -7202,6 +7207,11 @@
 	return ContentFitLayout;
 })();
 (function() {
+	
+	/**
+	 * game development kit (in development)
+	 * @package benignware.motion
+	 */
 	
 	var Class = benignware.core.Class;
 	var Element = Class.require('benignware.core.Element');

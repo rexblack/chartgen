@@ -3,11 +3,22 @@
 	
 	var Class = benignware.core.Class;
 	
+	/**
+	 * Data abstraction layer
+	 * @class benignware.visualization.DataTable
+	 */
 	function DataTable(data) {
 		
 		var columns = data && data.columns ? data.columns : [];
 		var rows = data && data.rows ? data.rows : [];
 		
+		/**
+		 * @privileged
+		 * @method addColumn
+		 * @param {String} type the column's data type
+		 * @param {String} label the column label
+		 * @param {String} pattern the column's format pattern 
+		 */
 		this.addColumn = function(type, label, pattern) {
 			columns.push({
 				type: type, 
@@ -16,29 +27,69 @@
 			});
 		}
 		
+		/**
+		 * returns an alphabetical column id based on the column index.
+		 * @privileged
+		 * @method getColumnId
+		 * @param {Number} columnIndex the column index
+		 * @return {String} the column id  
+		 */
 		this.getColumnId = function(columnIndex) {
 			return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(columnIndex);
 		}
 		
+		
+		/**
+		 * sets the label on column with the specified index.
+		 * @privileged
+		 * @method setColumnLabel
+		 * @param {Number} columnIndex the column index
+		 * @param {String} label the column label
+		 */
 		this.setColumnLabel = function(columnIndex, label) {
 			if (columns[columnIndex]) {
 				columns[columnIndex].label = label;
 			}
 		}
 		
+		/**
+		 * returns the label for the specified column index.
+		 * @privileged
+		 * @method getColumnLabel
+		 * @param {Number} columnIndex
+		 * @return {String} the column label
+		 */
 		this.getColumnLabel = function(columnIndex) {
 			return columns[columnIndex] && columns[columnIndex].label ? columns[columnIndex].label : "";
 			//this.getColumnId(columnIndex);
 		}
 		
+		/**
+		 * returns the type for the specified column index.
+		 * @privileged
+		 * @method getColumnType
+		 * @param {Number} columnIndex
+		 * @return {String} the column type
+		 */
 		this.getColumnType = function(columnIndex) {
 			return columns[columnIndex] && columns[columnIndex].type ? columns[columnIndex].type : null;
 		}
 		
+		/**
+		 * returns the pattern for the specified column index.
+		 * @privileged
+		 * @return {String} the column pattern
+		 */
 		this.getColumnPattern = function(columnIndex) {
 			return columns[columnIndex] && columns[columnIndex].pattern ? columns[columnIndex].pattern : null;
 		}
 		
+		/**
+		 * adds a row of values to the table
+		 * @privileged
+		 * @method addRow
+		 * @param {Array} values
+		 */
 		this.addRow = function(values) {
 			var rowIndex = rows.length;
 			for (var c = 0; c < values.length; c++) {
@@ -46,10 +97,26 @@
 			}
 		}
 		
+		/**
+		 * returns the value of the cell with specified row and column index.
+		 * @privileged
+		 * @method getCell
+		 * @param {Number} rowIndex
+		 * @param {Number} columnIndex
+		 * @return {Object} value 
+		 */
 		this.getCell = function(rowIndex, columnIndex) {
 			return rows[rowIndex][columnIndex];
 		}
 		
+		/**
+		 * sets the value of the cell with the specified row and column index.
+		 * @privileged
+		 * @method setCell
+		 * @param {Number} rowIndex
+		 * @param {Number} columnIndex
+		 * @param {Object} value
+		 */
 		this.setCell = function(rowIndex, columnIndex, value) {
 			// row
 			row = rows[rowIndex]; 
@@ -58,14 +125,32 @@
 			row[columnIndex] = value;
 		}
 		
+		/**
+		 * returns the number of columns of the data table.
+		 * @privileged
+		 * @method getNumberOfColumns
+		 * @return {Number} the number of columns
+		 */
 		this.getNumberOfColumns = function() {
 			return columns.length;
 		}
 		
+		/**
+		 * returns the number of rows of the data table.
+		 * @privileged
+		 * @method getNumberOfRows
+		 * @return {Number} the number of rows
+		 */
 		this.getNumberOfRows = function() {
 			return rows.length;
 		}
 		
+		/**
+		 * returns an object with columns and rows.
+		 * @privileged
+		 * @method toJSON
+		 * @return {Object} an object containing columns and rows
+		 */
 		this.toJSON = function() {
 			return {
 				columns: columns, 
@@ -86,6 +171,19 @@
 	
 	var Class = benignware.core.Class;
 	
+	/**
+	 * calculates a numerical scale.
+	 * @class benignware.visualization.NumericScale
+	 */
+	
+	/**
+	 * @constructor
+	 * @param {Number} min the minimum value
+	 * @param {Number} max the maximum value
+	 * @param {Number} ticks the amount of desired ticks
+	 * @param {Boolean} linear determines if the scale should contain all values or may be cut off.
+	 * @return {benignware.visualization.NumericScale} the scale object
+	 */
 	function NumericScale(min, max, ticks, linear) {
 		var result = calculateNumericScale(min, max, ticks, linear);
 		for (var x in result) {
@@ -95,9 +193,45 @@
 	
 	Class.register('benignware.visualization.NumericScale', NumericScale);
 	
+	/**
+	 * returns a nice number for the specified range
+	 * @static
+	 * @method prettyNumber
+	 * @param {Number} the range of the number
+	 * @param {Boolean} round specifies if the number should be rounded.
+	 * @return {Number} a nice number
+	 */
 	NumericScale.prettyNumber = function(range, round) {
 		return niceNum(range, round);
 	}
+	
+	/**
+	 * the calculated min value
+	 * @property min
+	 * @return {Number} the min value
+	 */
+	NumericScale.prototype.min;
+	
+	/**
+	 * the calculated max value
+	 * @property max
+	 * @return {Number} the max value
+	 */
+	NumericScale.prototype.max;
+	
+	/**
+	 * the calculated interval
+	 * @property interval
+	 * @return {Number} the scale interval
+	 */
+	NumericScale.prototype.interval;
+	
+	/**
+	 * the calculated tick values
+	 * @property tickItems
+	 * @return {Array} an array containing tick values
+	 */
+	NumericScale.prototype.tickItems;
 	
 	
 	function niceNum(range, round) {
@@ -232,12 +366,30 @@
 	var Class = benignware.core.Class;
 	var NumericScale = Class.require('benignware.visualization.NumericScale');
 	
+	/**
+	 * calculates a time-based scale
+	 * @class benignware.visualization.TimeScale
+	 * @extends benignware.visualization.NumericScale
+	 */
+	
+	/**
+	 * calculates a time-based scale
+	 * @constructor
+	 * @param {Number} min the minimum value
+	 * @param {Number} max the maximum value
+	 * @param {Number} ticks the amount of desired ticks
+	 * @param {Boolean} linear determines if the scale should contain all values or may be cut off.
+	 * @return {benignware.visualization.TimeScale} the scale object
+	 */
+	
 	function TimeScale(min, max, ticks, linear) {
 		var result = calculateTimeScale(min, max, ticks, linear);
 		for (var x in result) {
 			this[x] = result[x];
 		}
 	}
+	
+	Class.extend(NumericScale, TimeScale);
 	
 	Class.register('benignware.visualization.TimeScale', TimeScale);
 	
@@ -777,18 +929,15 @@
 		 * @method setSeriesColors
 		 * @param {Array} colors an array containing css color values 
 		 */
-		this.setSeriesColors = function(colors) {
-			
+		this.setSeriesColors = function(colors) {			
 			if (typeof(colors) == "string") {
 				colors = ArrayUtils.filter(colors.split(","), function(obj) {
 					return StringUtils.trim(obj);
 				});
 			}
+			_seriesColors = colors;
+			this.invalidate();
 			
-			if (_seriesColors != colors) {
-				_seriesColors = colors;
-				this.invalidate();
-			}
 		}
 		
 		/**
@@ -826,7 +975,6 @@
 			})();
 			
 			var colors = ArrayUtils.merge(defaultColors, _seriesColors);
-			
 			return colors;
 		}
 	}
@@ -1686,7 +1834,8 @@
     
     /**
 	 * LineChart class
-	 * @class benignware.visualization.LineChart  
+	 * @class benignware.visualization.LineChart 
+	 * @extends benignware.visualization.CartesianChart 
 	 */
     
 	function LineChart() {
@@ -1697,43 +1846,18 @@
 	
 	Class.extend(CartesianChart, LineChart);
 	_parent = Class.getParent(LineChart);
-
-	
-	LineChart.prototype._initialize = function(options) {
-		_parent._initialize.apply(this, arguments);
-	}
-	
-	LineChart.prototype._createChildren = function() {
-		_parent._createChildren.apply(this, arguments);
-	}
-	
-//	LineChart.prototype._renderLegend = function(labels) {
-//		if (!labels) {
-//			var labels = [];
-//			var dataTable = this.getDataTable();
-//			var rows = dataTable.rows;
-//			var categoryKey = this.getCategoryKey();
-//			for (var r = 0; r < rows.length; r++) {
-//				var row = rows[r]
-//				var cells = rows[r].cells;
-//				for (var c = 0; c < cells.length; c++) {
-//					var cell = cells[c];
-//					if (cell.id == categoryKey) {
-//						console.log("category cell: ", cell.value);
-//						labels.push(cell.value);
-//					}
-//				}
-//			}
-//		}
-//		_parent._renderLegend.call(this, labels);
-//	}
 	
 	LineChart.prototype._renderChart = function() {
 		_parent._renderChart.call(this);
-		this._renderGraphs();
+		this._renderLines();
 	}
 	
-	LineChart.prototype._renderGraphs = function() {
+	/**
+	 * renders the value graphs.
+	 * @protected
+	 * @method _renderLines
+	 */
+	LineChart.prototype._renderLines = function() {
 		
 		// get graphs
 		var dataTable = this.getDataTable();
@@ -1863,8 +1987,9 @@
 
     
     /**
-	 * ColumnChart class
+	 * ColumnChart class. 
 	 * @class benignware.visualization.ColumnChart  
+	 * @extends benignware.visualization.CartesianChart
 	 */
     
 	function ColumnChart() {
@@ -1876,25 +2001,16 @@
 	Class.extend(CartesianChart, ColumnChart);
 	_parent = Class.getParent(ColumnChart);
 
-	ColumnChart.prototype._initialize = function(options) {
-		_parent._initialize.apply(this, arguments);
-	}
-	
-	ColumnChart.prototype._createChildren = function() {
-		_parent._createChildren.apply(this, arguments);
-	}
-	
-	
-	ColumnChart.prototype._render = function() {
-		_parent._render.call(this);
-	}
-	
 	ColumnChart.prototype._renderChart = function(chartWidth, chartHeight) {
 		_parent._renderChart.apply(this, arguments);
-		this._renderColumns();
+		this._renderBars();
 	}
 	
-	ColumnChart.prototype._renderColumns = function() {
+	/**
+	 * renders the value bars
+	 * @method _renderBars
+	 */
+	ColumnChart.prototype._renderBars = function() {
 		
 		// get graphs
 		var dataTable = this.getDataTable();
@@ -2022,7 +2138,7 @@
 
     
     /**
-	 * BarChart class
+	 * BarChart class. The bar chart is a column chart that is initialized with the switchAxes property set to true.
 	 * @class benignware.visualization.BarChart  
 	 * @extends benignware.visualization.ColumnChart
 	 */
@@ -2058,6 +2174,7 @@
     /**
 	 * PieChart class
 	 * @class benignware.visualization.PieChart  
+	 * @extends benignware.visualization.VisualChart
 	 */
     
 	function PieChart() {
@@ -2070,16 +2187,14 @@
 	
 	Class.extend(VisualChart, PieChart);
 	_parent = Class.getParent(PieChart);
-
 	
-	PieChart.prototype._initialize = function(options) {
-		_parent._initialize.apply(this, arguments);
-	}
 	
-	PieChart.prototype._createChildren = function() {
-		_parent._createChildren.apply(this, arguments);
-	}
-	
+	/**
+	 * builds the legend items.
+	 * @protected
+	 * @method _buildLegendItems
+	 * @return {Array} an array containing legend items
+	 */
 	PieChart.prototype._buildLegendItems = function() {
 		var items = [];
 		var categoryIndex = this.getCategoryIndex();
@@ -2102,9 +2217,7 @@
 	}
 	
 	PieChart.prototype._render = function() {
-		
 		_parent._render.call(this);
-
 	}
 	
 	PieChart.prototype._renderChart = function(chartWidth, chartHeight) {
