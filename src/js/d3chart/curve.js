@@ -3,18 +3,12 @@
 	var CP_DISTANCE_FACTOR = 0.3
 
 	/** A cubic bezier curve representation, interpolating all given nodes. Fitting control points are computed as well.
-	 * @return
 	 */
 	function getCurvedGraphCoordSVG(points) {
 		var string = ""
 		var coords = [];
 		var x, y, xCP, yCP;
-//		var controlPoint0, controlPoint1
 		var xPre, yPre
-//		var xCoord = []
-//		var yCoord = []
-//		var i = 0
-//		var emissionValue
 
 		for (i = 0; i < points.length; i++) {
 			x = points[i].x;
