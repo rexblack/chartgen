@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+	    <meta charset="utf-8"/>
+	    
+	    <title>BaseChart</title>
+	    
+	    <script src="js/benignware/core-bundle-1.4.js"></script>
+	    <script src="js/benignware/visualization-bundle-1.4.js"></script>
+	    
+	    <script src="js/d3chart/curve.js"></script>
+	    
+	    <script>
+	    
+	    	function init() {
+	
+	    		var dataTable = new benignware.visualization.DataTable();
+	    		dataTable.addColumn('date', 'Datum');
+	    		dataTable.addColumn('number', 'Test f f  f fsjkjdksld sdsdsd jdsj sdffjf jfj jf jf');
+
+	    		dataTable.addRow([new Date('2008/5/5'), 10]);
+	    		dataTable.addRow([new Date('2009/5/5'), 20]);
+	    		dataTable.addRow([new Date('2010/5/5'), 30]);
+	    		dataTable.addRow([new Date('2011/5/5'), 23]);
+	    		
+	    		var chart = benignware.core.Element.create(benignware.visualization.LineChart);
+	    		chart.setLegend('right');
+	    		chart.setTitle('hello');
+	    		document.body.appendChild(chart);
+	    		chart.setDataTable(dataTable);
+	    		
+	    		
+				var points = [{ x:-126,  y:220}, 
+				{ x:64,  y:110},
+				{ x:164,  y:110}, 
+				{ x:200,  y:10}, 
+				{ x:254,  y:0}, 
+				{ x:444,  y:77}];
+				
+				var linearSVG = getLinearGraphCoordSVG(points); 
+	    		console.log(linearSVG);
+				var curveSVG = getCurvedGraphCoordSVG(points); 
+	    		console.log(curveSVG);
+
+
+	    	}
+	    </script>
+	</head>
+	<body onload="init();">
+		
+		<h1>Chart</h1>
+		
+		
+	</body>
+</html>

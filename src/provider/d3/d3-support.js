@@ -20,8 +20,17 @@
 		
 		switch (options.type) {
 		
-			case 'line': 
+			case 'line':
 				chartObj = new d3chart.LineChart(element, options);
+				chartObj.setCurve("linear");
+				break;
+			case 'line-inter':
+				chartObj = new d3chart.LineChart(element, options);
+				chartObj.setCurve("inter");
+				break;
+			case 'line-approx': 
+				chartObj = new d3chart.LineChart(element, options);
+				chartObj.setCurve("approx");
 				break;
 		
 		}
