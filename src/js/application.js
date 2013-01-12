@@ -15,9 +15,6 @@
 	
 //	var serviceUrl = "service/csv.php";
 	var serviceUrl = "http://dev.benignware.com/chartgen/service/csv.php";
-=======
-	var serviceUrl = "service/csv.php";
-	//var serviceUrl = "http://dev.benignware.com/chartgen/service/csv.php";
 	
 	var patterns = {
 		date: ['dd.mm.yy'], 
