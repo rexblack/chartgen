@@ -1,0 +1,74 @@
+body {
+	font-size: 12px;
+	font-family: Trebuchet MS;
+}
+
+td, th {
+	font-size: 12px;
+	padding: 2px;
+	vertical-align: top;
+}
+
+th {
+	padding: 3px 6px;
+	
+}
+
+tr th:first-child {
+	text-align: right;
+}
+
+#chart-form, 
+#chart-view {
+	float: left;
+	margin-right: 20px;
+}
+
+#data-source-url-options input {
+	width: 400px;
+}
+
+#data-source-url-options.loading {
+	background-image: url('ajax-loader.gif');
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 20px;
+}
+
+#data-source-url-options.loading input {
+	width: 380px;
+}
+
+fieldset {
+	margin: 10px;
+	border: 1px solid #efefef;
+}
+
+textarea {
+	width: 400px;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	height: 120px;
+}
+
+#chart-options {
+	float: left;
+	margin-right: 10px;
+}
+
+#chart-embed-button {
+	float: right;
+}
+
+#chart-preview {
+	border: 1px solid #efefef;
+	margin-bottom: 10px;
+}
+
+#chart-preview.error {
+	color: red;
+}
+
+input[name='title'] {
+	width: 400px;
+}
