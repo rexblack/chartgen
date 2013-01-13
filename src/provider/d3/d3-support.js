@@ -14,26 +14,40 @@
 	// render chart
 	ChartGenD3Support.prototype.renderChart = function(element, options) {
 		
-		console.log("call d3 support: ", element, options); 
+		
 		
 		var chartObj = null;
 		
 		switch (options.type) {
 		
 			case 'line':
-				chartObj = new d3chart.LineChart(element, options);
-				chartObj.setCurve("linear");
-				break;
-			case 'line-inter':
-				chartObj = new d3chart.LineChart(element, options);
-				chartObj.setCurve("inter");
-				break;
-			case 'line-approx': 
-				chartObj = new d3chart.LineChart(element, options);
-				chartObj.setCurve("approx");
+				
+				if (options.smooth && options.smooth != 'none') {
+					
+					if (options.smooth == 'approximation') {
+						chartObj = new d3chart.LineChart(element, options);
+						chartObj.setCurve("approx");
+					} else if (options.smooth == 'interpolation') {
+						chartObj = new d3chart.LineChart(element, options);
+						chartObj.setCurve("inter");
+					}
+					
+				} else {
+					console.log("line-chart: ", element, options); 
+					chartObj = new d3chart.LineChart(element, options);
+					chartObj.setCurve("linear");
+				}
+				
 				break;
 		
 		}
+		
+		
+		if (!chartObj) {
+			throw 'Chart-type is not supported';
+			return;
+		}
+		
 		chartObj.setDataTable(options.dataTable);
 		chartObj.setTitle(options.title);
 		if (chartObj.setLegend) {
@@ -42,14 +56,8 @@
 		if (chartObj.setSeriesColors) {
 			chartObj.setSeriesColors(options.seriesColors);
 		}
-		
-		if (!chartObj) {
-			throw 'Chart-type is not supported';
-		}
-		
-		if (chartObj) {
-			chartObj._renderChart();
-		}
+		chartObj._renderChart();
+	
 	}
 	
 	// register plugin

@@ -1,4 +1,4 @@
-<project name="FeedMag" default="build">
+<project name="ChartBuilder" default="build">
 	
 	<property name="author" value="Rafael Nowrotek"/>
 	<property name="company" value="benignware.com"/>
@@ -12,7 +12,7 @@
    <target name="build">
 		
 		<mkdir dir="${build.dir}" />
-
+   	
 		<copy todir="${build.dir}">
 	   	    <fileset dir="${src.dir}">
 	   	    </fileset>
