@@ -1063,12 +1063,16 @@
 		 */
 		this.dispatchEvent = function(event) {
 			
+			
 //			console.log("dispatch event: ", event, __parent.dispatchEvent);
 			
 			var canceled = false;
 			if (__parent.dispatchEvent) {
 				// native w3c
 //				console.log("native");
+				if (event.type == 'scrollend') {
+					console.log("DISPATCH!!!!")
+				}
 				__parent.dispatchEvent.apply(this, arguments);
 //				if (navigator.userAgent.match(/webkit/i)) {
 //					console.log("return", navigator.userAgent);
@@ -2814,7 +2818,7 @@
 	 * @return {Array} an array containing css selectors
 	 */
 	Element.getCSSNames = function(element) {
-		return element && element.className ? element.className.split(/\s+/) : [];
+		return element && typeof element.className == 'string' ? element.className.split(/\s+/) : [];
 	}
 	
 	/**
@@ -2825,10 +2829,12 @@
 	 * @return {Boolean} true, if the element contains the css selector.
 	 */
 	Element.hasCSSName = function(element, string) {
-		var cssNames = Element.getCSSNames(element);
-		for (var i = 0; i < cssNames.length; i++) {
-			if (cssNames[i] == string) {
-				return true;
+		if (typeof element.className == 'string') {
+			var cssNames = Element.getCSSNames(element);
+			for (var i = 0; i < cssNames.length; i++) {
+				if (cssNames[i] == string) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -3207,6 +3213,22 @@
 			if (node == elem.ownerDocument) break;
 		}
 		return null;
+	}
+	
+	DOM.getElementsByCSSName = function(elem, cssName) {
+		var result = [];
+		for (var i = 0; i < elem.childNodes.length; i++) {
+			var child = elem.childNodes[i];
+			if (child.nodeType == 1) {
+				if (child.style) {
+					if (Element.hasCSSName(child, cssName)) {
+						result.push(child);
+					}
+				}
+				result = result.concat(DOM.getElementsByCSSName(child, cssName));
+			}
+		}
+		return result;
 	}
 	
 	DOM.getParentElementByCSSName = function(elem, cssName) {
@@ -4812,6 +4834,7 @@
 			this.invalidate();
 			this.dispatchEvent(Event.create(this.ownerDocument, 'show', false, false));
 		}
+		return this;
 	}
 	
 	/**
@@ -4824,6 +4847,7 @@
 			this.addCSSName('hidden');
 			this.dispatchEvent(Event.create(this.ownerDocument, 'hide', false, false));
 		}
+		return this;
 	}
 	
 	Component.prototype.toggleVisibility = function() {

@@ -718,6 +718,133 @@
 	}
 	
 	
+	/**
+	 * 
+	 * renders a line. 
+	 * @static
+	 * @method renderLine
+	 * @param {Element} svg an svg layer
+	 * @param {Array} points an array containing objects with x- and y-properties
+	 * @param {Object} options an object containing options
+	 */
+	SVGUtils.renderLine = function(svg, points, options) {
+//		console.log("render line", points.length, options);
+		var smooth = typeof options.smooth == 'boolean' ? options.smooth : false;
+		var tension = typeof options.tension == 'number' ? options.tension : 0.5;
+		var stroke = typeof options.stroke != 'undefined' ? options.stroke : '#000';
+		var strokeWidth = typeof options.strokeWidth != 'undefined' ? options.strokeWidth : 1;
+		var approximate = typeof options.approximate == 'boolean' ? options.approximate : false;
+		var t = !isNaN( options.tension ) ? options.tension : 0.5;
+		
+		var pathElem = svg.ownerDocument.createElementNS("http://www.w3.org/2000/svg", "path");
+		svg.appendChild(pathElem);
+		
+		var pathStr = "";
+		
+		
+		if (!smooth) {
+			for (var i = 0; i < points.length; i++ ) {
+				var p = points[i];
+				pathStr+= i > 0 ? "L " : "M ";
+				pathStr+= p.x + " " + p.y;
+			}	
+		} else if (approximate) {
+			var p = points[0];
+			pathStr+= "M" + p.x + " " + p.y + " ";
+			for (var i = 1; i < points.length - 1; i++) {
+			    var c = (points[i].x + points[i + 1].x) / 2;
+			    var d = (points[i].y + points[i + 1].y) / 2;
+			    pathStr+= "Q " + points[i].x + " " + points[i].y + " " + c + " " + d;
+			}
+			pathStr+= "T " + points[i].x + " " + points[i].y;
+		} else {
+			var p = points[0];
+			pathStr+= "M" + p.x + " " + p.y + " ";
+			for (var i = 1; i < points.length - 1; i+=1) {
+				var p = points[i - 1];
+				var p1 = points[i];
+				var p2 = points[i + 1];
+			    var cps = getControlPoints(p.x, p.y, p1.x, p1.y, p2.x, p2.y, 0.5);
+//			    pathStr+= "Q " + points[i].x + " " + points[i].y + " " + c + " " + d;
+//			    var cpx = p1.x * 2 - (p.x + p2.x) / 2;
+//			    var cpy = p1.y * 2 - (p.y + p2.y) / 2;
+//			    console.log("I: ", i, cpx, cpy);
+//			    pathStr+= "Q " + p.x + " " + p.y + " " + cpx + " " + cpy;
+//			    pathStr+= "T " + p.x + " " + p.y;
+			    pathStr+= "C " + cps.p1.x + " " + cps.p1.y + " " + cps.p2.x + " " + cps.p2.y + " " + p2.x + " " + p2.y;
+			}
+			pathStr+= "T " + points[points.length - 1].x + " " + points[points.length - 1].y;
+		}
+
+		pathElem.setAttribute("d", pathStr);
+		pathElem.setAttribute("stroke", stroke);
+		pathElem.setAttribute("stroke-width", strokeWidth);
+		pathElem.setAttribute("fill", "none");
+		
+	}
+	
+	
+	function getControlPoints(x0,y0,x1,y1,x2,y2,t){
+		t = typeof t == 'number' ? t : 0.5;
+		console.log("ctrl points: T: ", t);
+	    var d01=Math.sqrt(Math.pow(x1-x0,2)+Math.pow(y1-y0,2));
+	    var d12=Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
+	    var fa=t*d01/(d01+d12);   // scaling factor for triangle Ta
+	    var fb=t*d12/(d01+d12);   // ditto for Tb, simplifies to fb=t-fa
+	    var p1x=x1-fa*(x2-x0);    // x2-x0 is the width of triangle T
+	    var p1y=y1-fa*(y2-y0);    // y2-y0 is the height of T
+	    var p2x=x1+fb*(x2-x0);
+	    var p2y=y1+fb*(y2-y0);  
+//	    return [p1x,p1y,p2x,p2y];
+	    return {
+	    	p1: {x: p1x, y: p1y}, 
+	    	p2: {x: p2x, y: p2y}
+	    }
+	}
+	
+	function catmullRom2bezier( points ) {
+		  // alert(points)
+		  var crp = points.split(/[,\s]/);
+		  
+		  var d = "";
+		  for (var i = 0, iLen = crp.length; iLen - 2 > i; i+=2) {
+		    var p = [];
+		    if ( 0 == i ) {
+		      p.push( {x: parseFloat(crp[ i ]), y: parseFloat(crp[ i + 1 ])} );
+		      p.push( {x: parseFloat(crp[ i ]), y: parseFloat(crp[ i + 1 ])} );
+		      p.push( {x: parseFloat(crp[ i + 2 ]), y: parseFloat(crp[ i + 3 ])} );
+		      p.push( {x: parseFloat(crp[ i + 4 ]), y: parseFloat(crp[ i + 5 ])} );
+		    } else if ( iLen - 4 == i ) {
+		      p.push( {x: parseFloat(crp[ i - 2 ]), y: parseFloat(crp[ i - 1 ])} );
+		      p.push( {x: parseFloat(crp[ i ]), y: parseFloat(crp[ i + 1 ])} );
+		      p.push( {x: parseFloat(crp[ i + 2 ]), y: parseFloat(crp[ i + 3 ])} );
+		      p.push( {x: parseFloat(crp[ i + 2 ]), y: parseFloat(crp[ i + 3 ])} );
+		    } else {
+		      p.push( {x: parseFloat(crp[ i - 2 ]), y: parseFloat(crp[ i - 1 ])} );
+		      p.push( {x: parseFloat(crp[ i ]), y: parseFloat(crp[ i + 1 ])} );
+		      p.push( {x: parseFloat(crp[ i + 2 ]), y: parseFloat(crp[ i + 3 ])} );
+		      p.push( {x: parseFloat(crp[ i + 4 ]), y: parseFloat(crp[ i + 5 ])} );
+		    }
+		    
+		    // Catmull-Rom to Cubic Bezier conversion matrix 
+		    //    0       1       0       0
+		    //  -1/6      1      1/6      0
+		    //    0      1/6      1     -1/6
+		    //    0       0       1       0
+
+		    var bp = [];
+		    bp.push( { x: p[1].x,  y: p[1].y } );
+		    bp.push( { x: ((-p[0].x + 6*p[1].x + p[2].x) / 6), y: ((-p[0].y + 6*p[1].y + p[2].y) / 6)} );
+		    bp.push( { x: ((p[1].x + 6*p[2].x - p[3].x) / 6),  y: ((p[1].y + 6*p[2].y - p[3].y) / 6) } );
+		    bp.push( { x: p[2].x,  y: p[2].y } );
+
+		    d += "C" + bp[1].x + "," + bp[1].y + " " + bp[2].x + "," + bp[2].y + " " + bp[3].x + "," + bp[3].y + " ";
+		  }
+		  
+		  return d;
+		}
+	
+	
 	return SVGUtils;
 })();
 (function() {
@@ -1299,6 +1426,7 @@
 			var legendY = 0;
 			
 			var legendSize = SVGUtils.renderList(this.legendLayer, items, legendWidth, legendOptions);
+			this.legendLayer.setAttribute("class", "chart-legend");
 			
 			switch (legendPosition) {
 				
@@ -1337,7 +1465,6 @@
 		
 		var title = this.getTitle();
 		
-		
 		if (title != null) {
 			
 			var titleX = chartX;
@@ -1348,6 +1475,8 @@
 			
 			titleText.style.fontSize = "16px";
 			titleText.style.fontWeight = "bold";
+			titleText.setAttribute("class", "chart-title");
+			
 			var titleTextNode = this.ownerDocument.createTextNode(title);
 			
 			titleText.appendChild(titleTextNode);
@@ -1625,7 +1754,7 @@
 			lineElem.setAttribute('y2', y);
 			lineElem.setAttribute("stroke", "#efefef");
 			lineElem.setAttribute("stroke-width", "1");
-			lineElem.setAttribute("class", "grid-line horizontal-grid");
+			lineElem.setAttribute("class", "chart-grid");
 		}
 		
 		// vertical axis
@@ -1637,16 +1766,13 @@
 		lineElem.setAttribute('y2', chartHeight);
 		lineElem.setAttribute("stroke", "#000000");
 		lineElem.setAttribute("stroke-width", "1");
-		lineElem.setAttribute("class", "axis-line vertical-axis");
-		
-		
+		lineElem.setAttribute("class", "chart-axis");
 		SVGUtils.clear(this.xAxisGridLayer);
 		
 		
 
 		
 		// horizontal grid
-		
 		for (var i = 0; i < rx.ticks.length; i++) {
 			var vx = rx.ticks[i];
 			var px = (vx - rx.min) / (rx.max - rx.min);
@@ -1659,7 +1785,7 @@
 			lineElem.setAttribute('y2', chartHeight);
 			lineElem.setAttribute("stroke", "#efefef");
 			lineElem.setAttribute("stroke-width", "1");
-			lineElem.setAttribute("class", "grid-line vertical-grid");
+			lineElem.setAttribute("class", "chart-grid");
 		}
 
 		// horizontal axis
@@ -1671,7 +1797,7 @@
 		lineElem.setAttribute('y2', chartHeight);
 		lineElem.setAttribute("stroke", "#000000");
 		lineElem.setAttribute("stroke-width", "1");
-		lineElem.setAttribute("class", "axis-line horizontal-axis");
+		lineElem.setAttribute("class", "chart-axis");
 		
 	
 		// ticks
@@ -1714,9 +1840,8 @@
 			var textSize = SVGUtils.renderText(labelText, label, labelMaxWidth);
 			
 			labelText.setAttribute("text-anchor", "end");
-			
 			labelText.setAttribute("y", y - textSize.height / 2);
-			
+			labelText.setAttribute("class", "chart-axis-label");
 			
 		}
 
@@ -1766,7 +1891,8 @@
 				labelText.setAttribute("x", v);
 				var textSize = SVGUtils.renderText(labelText, label, labelMaxWidth);
 				labelText.setAttribute("text-anchor", "middle");
-
+				labelText.setAttribute("class", "chart-axis-label");
+					
 				var y = chartHeight + labelMargin;
 				
 				if (labelText.getComputedTextLength() > labelMaxWidth) {
@@ -1827,6 +1953,7 @@
 	var StringUtils = Class.require("benignware.util.StringUtils");
 	var CSS = Class.require("benignware.util.CSS");
 	
+	var SVGUtils = Class.require("benignware.visualization.SVGUtils");
 	var CartesianChart = Class.require("benignware.visualization.CartesianChart");
 	
 	var _parent;
@@ -1840,12 +1967,30 @@
     
 	function LineChart() {
 		_parent.apply(this, arguments);
+		
+		var _smooth = false;
+		
+		this.setSmooth = function(string) {
+			if (string != _smooth) {
+				_smooth = string;
+				this.invalidate();
+			}
+		}
+		
+		this.getSmooth = function() {
+			return _smooth;
+		}
 	}
 	
 	Class.register("benignware.visualization.LineChart", LineChart);
 	
 	Class.extend(CartesianChart, LineChart);
 	_parent = Class.getParent(LineChart);
+	
+	
+	LineChart.SMOOTH_NONE = "none";
+	LineChart.SMOOTH_ACCURATE = "accurate";
+	LineChart.SMOOTH_APPROXIMATE = "approximate";
 	
 	LineChart.prototype._renderChart = function() {
 		_parent._renderChart.call(this);
@@ -1879,7 +2024,7 @@
 		
 		var graphs = [];
 		
-		
+		var lastValues = [];
 		
 		for (var r = 0; r < dataTable.getNumberOfRows(); r++) {
 
@@ -1898,6 +2043,7 @@
 
 			// series values
 
+			
 			for (var c = 0; c < dataTable.getNumberOfColumns(); c++) {
 
 				if (c != categoryIndex) {
@@ -1905,7 +2051,25 @@
 					var columnId = dataTable.getColumnId(c);
 					var graph = graphs[columnId] ? graphs[columnId] : graphs[columnId] = [];
 					
-					var value = dataTable.getCell(r, c);
+					var v = dataTable.getCell(r, c);
+
+					if (v != null) {
+						value = v; 
+						lastValues[c] = value;
+					} else {
+						if (typeof lastValues[c] == 'undefined') {
+							// get initial value
+							for (var a = 0; a < dataTable.getNumberOfRows(); a++) {
+								var iv = dataTable.getCell(a, c);
+								if (typeof iv != 'undefined' && iv != null) {
+									lastValues[c] = iv;
+									break;
+								}
+							}
+						}
+						value = lastValues[c];
+					}
+					
 					if (dataTable.getColumnType(c) == 'date') {
 						value = value.getTime();
 					}
@@ -1924,46 +2088,77 @@
 					var px = pc;
 					var py = pv;
 					
+//					console.log("P: ", px, py);
+					
 					// upscale by chart size
 					var x = Math.floor(px * chartWidth);
 					var y = Math.floor(chartHeight - py * chartHeight);
 					
+					
+					
 					graph.push({x: x, y: y});
 					
-					i++;
+//					i++;
 				}
 
 			}
 			
 		}
 		
+		var smooth = this.getSmooth();
 
 		var graphIndex = 0;
 		for (var columnId in graphs) {
 			
 			var points = graphs[columnId];
 			
-			var pathElem = this.ownerDocument.createElementNS("http://www.w3.org/2000/svg", "path");
-			this.chartLayer.appendChild(pathElem);
-			
-			var pathStr = "M";
-			
-			for (var i = 0; i < points.length; i++ ) {
-				var p = points[i];
-				
-				if (i > 0) {
-					pathStr+= "L";
-				}
-				
-				pathStr+= p.x + " " + p.y + " ";
-			}
+//			var pathElem = this.ownerDocument.createElementNS("http://www.w3.org/2000/svg", "path");
+//			this.chartLayer.appendChild(pathElem);
+//			
+//			var pathStr = "";
+//			
+//			for (var i = 0; i < points.length; i++ ) {
+//				var p = points[i];
+//				console.log("P: ", p);
+////				if (i > 0) {
+////					pathStr+= "T ";
+////				}
+////				
+////				pathStr+= p.x + " " + p.y + " ";
+//				
+//				if (i > 0 ) {
+//					
+//					if (smooth && i < points.length - 1) {
+//						var p0 = points[i - 1];
+//						var p1 = points[i + 1];
+//						var cpx = p.x * 2 - (p0.x + p1.x) / 2;
+//						var cpy = p.y * 2 - (p0.y + p1.y) / 2;
+//						console.log("I: ", i, p0, p1);
+//						// pathStr+= "Q " + p1.x + " " + p1.y + " " + cpx + " " + cpy;
+//						pathStr+= "Q "  + cpx + " " + cpy + " " + p1.x + " " + p1.y + " ";
+//						// pathStr+= "T " + p.x + " " + p.y + " ";
+//					} else {
+//						pathStr+= "T " + p.x + " " + p.y;
+//					}
+//					
+//				} else {
+//					pathStr+= "M" + p.x + " " + p.y + " ";
+//				}
+//				
+//			}
 			
 			var color = colors[graphIndex];
 			
-			pathElem.setAttribute("d", pathStr);
-			pathElem.setAttribute("stroke", color);
-			pathElem.setAttribute("stroke-width", "1");
-			pathElem.setAttribute("fill", "none");
+//			pathElem.setAttribute("d", pathStr);
+//			pathElem.setAttribute("stroke", color);
+//			pathElem.setAttribute("stroke-width", "1");
+//			pathElem.setAttribute("fill", "none");
+			
+			var smoothType = this.getSmooth();
+			var smooth = (smoothType && smoothType != 'none');
+			var approximate = smoothType && smoothType == "approximate";
+			SVGUtils.renderLine(this.chartLayer, points, {stroke: color, smooth: smooth, approximate: true})
+//			SVGUtils.renderLine(this.chartLayer, points, {stroke: 'black', smooth: false, approximate: true})
 			
 			graphIndex++;
 		}

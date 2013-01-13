@@ -302,7 +302,7 @@
 	
 	/**
 	 * base class for editable items
-	 * @class benignware.core.EditableItem
+	 * @class benignware.controls.EditableItem
 	 */
 	
 	function EditableItem(){
@@ -2701,6 +2701,7 @@
 				} else {
 					console.log("scroll finish");
 					updatePage.call(scrollView);
+					console.log("scroll finish:::");
 					scrollEnd.call(this);
 				}
 				
@@ -3559,9 +3560,11 @@
 			
 			function scrollEnd() {
 				if (isScrolling) {
-//					console.log("scroll end", this);
+					console.log("scroll end", this, isScrolling);
 					isScrolling = false;
-					this.dispatchEvent(Event.create('scrollend', false, false));
+					console.log("dispatch scroll end", this, isScrolling);
+					var scrollEvent = Event.create('scrollend', false, false);
+					this.dispatchEvent(scrollEvent);
 				}
 			}
 
@@ -5244,12 +5247,12 @@
 	CSS.setDefaultStyle(".benignware-view-Lightbox .lightbox-close", "float", "right");
 	CSS.setDefaultStyle(".benignware-view-Lightbox .lightbox-close", "cursor", "pointer");
 	
-	CSS.setDefaultStyle(".benignware-view-Lightbox .content-layer", "clear", "both");
-//	CSS.setDefaultStyle(".benignware-view-Lightbox .content-layer", "background", "#fff");
-	CSS.setDefaultStyle(".benignware-view-Lightbox .content-layer", "overflow", "auto");
-//	CSS.setDefaultStyle(".benignware-view-Lightbox .content-layer", "padding", "5px");
-	CSS.setDefaultStyle(".benignware-view-Lightbox .content-layer", "position", "relative");
-	CSS.setDefaultStyle(".benignware-view-Lightbox .content-layer", "-webkit-overflow-scrolling", "touch");
+	CSS.setDefaultStyle(".benignware-view-Lightbox > .content-layer", "clear", "both");
+//	CSS.setDefaultStyle(".benignware-view-Lightbox > .content-layer", "background", "#fff");
+	CSS.setDefaultStyle(".benignware-view-Lightbox > .content-layer", "overflow", "auto");
+//	CSS.setDefaultStyle(".benignware-view-Lightbox > .content-layer", "padding", "5px");
+	CSS.setDefaultStyle(".benignware-view-Lightbox > .content-layer", "position", "relative");
+	CSS.setDefaultStyle(".benignware-view-Lightbox > .content-layer", "-webkit-overflow-scrolling", "touch");
 	
 	CSS.setDefaultStyle(".benignware-view-Lightbox.maximized", "margin", "0");
 	CSS.setDefaultStyle(".benignware-view-Lightbox.maximized", "max-width", "none");
@@ -5257,7 +5260,7 @@
 	CSS.setDefaultStyle(".benignware-view-Lightbox.maximized", "width", "100%");
 	CSS.setDefaultStyle(".benignware-view-Lightbox.maximized", "height", "100%");
 	
-	CSS.setDefaultStyle(".benignware-view-Lightbox.maximized .content-layer", "height", "100%");
+	CSS.setDefaultStyle(".benignware-view-Lightbox.maximized > .content-layer", "height", "100%");
 
 	
 	function Lightbox() {
@@ -5400,6 +5403,7 @@
 		x = x < 0 ? 0 : x;
 		y = y < 0 ? 0 : y;
 		
+		
 		this.style.left = x + "px";
 		this.style.top = y + "px";
 
@@ -5459,7 +5463,7 @@
 		this.originalParentElem = this.parentNode;
 		this.ownerDocument.body.appendChild(this);
 		this.ownerDocument.body.insertBefore(this.backgroundElem, this);
-		_parent.show.apply(this, arguments);
+		return _parent.show.apply(this, arguments);
 	}
 	
 	Lightbox.prototype.hide = function() {
@@ -5468,7 +5472,7 @@
 			this.originalParentElem.appendChild(this);
 		}
 		this.insertBefore(this.backgroundElem, this.headerElem);
-		_parent.hide.apply(this, arguments);
+		return _parent.hide.apply(this, arguments);
 	}
 	
 	return Lightbox;
