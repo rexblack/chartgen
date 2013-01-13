@@ -18,7 +18,7 @@ window.DataTable = (function() {
 		}
 		
 		this.getColumnLabel = function(columnIndex) {
-			return column && column.label ? column.label : "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(columnIndex);
+			return columns[columnIndex] && columns[columnIndex].label ? columns[columnIndex].label : "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(columnIndex);
 		}
 		
 		this.getColumnType = function(columnIndex) {

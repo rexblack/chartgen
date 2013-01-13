@@ -1,0 +1,100 @@
+D3.js
+
+http://d3js.org/
+
+// ALLGEMEIN
+
+o kein typisches Vis-Framework, sondern ein "Dokument-Umwandler" von Daten in ein DOM ("jQuery für Vis")
+
+o deklarative DSL
+
+o aber keine Abstraktionsschicht dazwischen, Daten werden direkt auf ein DOM abgebildet
+-> Performance-Vorteile
+
+o viele Möglichkeiten, das DOM zu manipulieren, z.B. bei Änderungen in den Daten effektiv zu aktualisieren
+
+o Selektionen, Operatoren, Data joins, Event Handler, Helper-Module
+
+o Helper-Module
+
+	Shapes: Einfaches Erzeugen von verschiedenen grafischen Elementen
+
+	Scales: Achsentypen ordinal und quantitativ (linear, logarithmisch, exponentiell, quantil)
+
+	Layouts: Flexible Anordnung von Elementen
+
+	Behaviors: Definieren und Wiederverwenden von Interaktionstechniken, z.B. Zoomen
+
+	Geo: Projektion geographischer Daten, z.B. für Karten und kartenähnliche Diagramme
+
+	Transformation: Grafische Übergänge wie Easing. Explizit, d.h. man definiert die Transformation an sich, nicht Start- und Endstatus der Visualisierung
+	manipulieren existierende Dokumente im DOM, d.h. Manipulation ist entkoppelt von der Generierung
+
+o Datenstruktur
+	Array von Objekten, d.h.
+	var data = [
+	{
+		column0: 176,
+		column1: 17.6
+	},
+	{
+		column0: 34,
+		column1: 15.2
+	},
+	]; 
+		
+o sehr klarer Aufbau
+
+o jQuery-ähnliche Syntax:
+	svg.append("path")
+      .datum(data)
+      .attr("class", "line")
+      .attr("d", line);
+
+o umfangreiche Manipulationsmöglichkeiten der Daten und des Dokuments
+
+o Importieren, Parsen, Filtern sehr einfach (JSON, Text, CSV, XML...)
+
+o gut für dynamische Visualisierungen (sowohl Darstellung, als auch viele Änderungen in den Daten)
+
+// ERFAHRUNGEN
+
+Für das Charting-Framework:
+
+o Erstmal gewöhnungsbedürftig beim Einstieg
+
+o nicht immer leicht zu durchschauen, was passiert
+
+Wichtige Features:
+o Achsen
+Aufgeteilt in
+Skalen: ordinal (nicht-numerisch, aber geordnet), quantitativ (numerisch), Zeit
+Skalentyp: linear, logarithmisch...
+Orientierung
+Ticks: Funktion, die die Ticks setzt
+ 
+(+) Achsen-Darstellung wird automatisch erzeugt, z.B. werden für die Ticks möglichst runde Werte erzeugt
+(+) Formatierung kann einfach definiert werden, auch für Zeitachsen
+(-) Aber keine Lokalisierung
+(-) Keine Möglichkeit, Überlappung der Labels zu verhindern
+(-) Keine automatische Beschriftung
+
+(+) Auch Zeitskala möglich, Umrechnung der Werte für Kurve und Achsen-Ticks automatisch
+
+o Kurven
+linear und verschiedene Kurvenformen vordefiniert (SVG)
+(+) Die interpolierende Kurve als Einzeiler definiert: "line.interpolate("cardinal")"
+(+) andere leicht hinzuzufügen (Interpolationsvorschrift)
+
+-> es werden einem nicht alle benötigten Dinge fürs Charting abgenommen, aber die Grundlagen sind gut:
+o Datenaufbereitung (Filtern, Skalieren etc.)
+o Definition der Achsen
+o Zeichnen und animieren
+o Interaktion
+
+Der Einsatz scheint sich vor allem bei sich bei der Visualisierung von stark veränderlichen Daten zu lohnen.
+D3 ist darauf ausgelegt (Datenverwaltung, aber auch dynamische Darstellung) 
+Das selbst zu programmieren wäre recht aufwendig.
+
+ 
+

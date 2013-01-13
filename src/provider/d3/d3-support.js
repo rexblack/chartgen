@@ -1,32 +1,8 @@
 (function() {
 
-	
-	/*
-	 * D3-LineChart
-	 */
-	
-	function LineChart(element, options) {
-		this.element = element; 
-		this.options = options;
-	}
-	
-	
-	LineChart.prototype.render = function() {
-//		console.log('render d3 line-chart', this.element, this.options);
-			
-		var element = this.element;
-		element.style.width = this.options.width + "px";
-		element.style.height = this.options.height + "px";
-		// example implementation
-		var doc = element.ownerDocument;
-		var title = doc.createElement('h3');
-		title.innerHTML = this.options.title;
-		element.appendChild(title);
-	}
-	
-	
-	
-	
+	var Class = benignware.core.Class;
+	var Element = Class.require('benignware.core.Element');
+	var Loader = Class.require('benignware.core.Loader');
 	
 	/*
 	 * D3-Support Class
@@ -34,7 +10,6 @@
 	function ChartGenD3Support() {
 		this.name = 'D3';
 	}
-	
 	
 	// render chart
 	ChartGenD3Support.prototype.renderChart = function(element, options) {
@@ -45,18 +20,37 @@
 		
 		switch (options.type) {
 		
-			case 'line': 
-				chartObj = new LineChart(element, options);
+			case 'line':
+				chartObj = new d3chart.LineChart(element, options);
+				chartObj.setCurve("linear");
+				break;
+			case 'line-inter':
+				chartObj = new d3chart.LineChart(element, options);
+				chartObj.setCurve("inter");
+				break;
+			case 'line-approx': 
+				chartObj = new d3chart.LineChart(element, options);
+				chartObj.setCurve("approx");
 				break;
 		
 		}
-		
-		if (chartObj) {
-			chartObj.render();
+		chartObj.setDataTable(options.dataTable);
+		chartObj.setTitle(options.title);
+		if (chartObj.setLegend) {
+			chartObj.setLegend(options.legend);
+		}
+		if (chartObj.setSeriesColors) {
+			chartObj.setSeriesColors(options.seriesColors);
 		}
 		
+		if (!chartObj) {
+			throw 'Chart-type is not supported';
+		}
+		
+		if (chartObj) {
+			chartObj._renderChart();
+		}
 	}
-	
 	
 	// register plugin
 	window.registerProvider('d3', new ChartGenD3Support());
