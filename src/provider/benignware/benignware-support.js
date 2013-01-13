@@ -71,6 +71,9 @@
 		if (chartObj.setSeriesColors) {
 			chartObj.setSeriesColors(options.seriesColors);
 		}
+		if (chartObj.setSmooth) {
+			chartObj.setSmooth(options.smooth);
+		}
 		
 		if (!chartObj) {
 			throw 'Chart-type is not supported';

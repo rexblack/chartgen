@@ -120,7 +120,7 @@ function parseNumber(string, pattern) {
 		}
 	}
 	
-	return 0;
+	return null;
 }
 
 /**

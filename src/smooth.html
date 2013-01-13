@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		
+		<script src="js/benignware/core-bundle-1.4.js"></script>
+	    <script src="js/benignware/visualization-bundle-1.4.js"></script>
+	    
+		<script>
+		
+			
+			var SVGUtils = benignware.visualization.SVGUtils;
+		
+			function init() {
+				console.log('init');
+				var dataTable = new benignware.visualization.DataTable();
+	    		dataTable.addColumn('number', 'Datum');
+	    		dataTable.addColumn('number', 'Test f f  f fsjkjdksld sdsdsd jdsj sdffjf jfj jf jf');
+
+	    		dataTable.addRow([0, 10]);
+	    		dataTable.addRow([50, 150]);
+	    		dataTable.addRow([90, 200]);
+	    		dataTable.addRow([200, 300]);
+	    		dataTable.addRow([300, 230]);
+	    		dataTable.addRow([400, 300]);
+	    		
+	    		var points = [];
+	    		for (var i = 0; i < dataTable.getNumberOfRows(); i++) {
+	    			points.push({x: dataTable.getCell(i, 0), y: dataTable.getCell(i, 1)})
+	    		}
+	    		
+	    		console.log("points: ", points);
+				
+				var svg = document.getElementById('svg');
+				SVGUtils.renderLine(svg, points, {smooth: false, stroke: 'blue'})
+				SVGUtils.renderLine(svg, points, {smooth: true, stroke: 'green', approximate: true})
+				SVGUtils.renderLine(svg, points, {smooth: true, stroke: 'red', approximate: false})
+				
+			}
+			
+			
+			
+			
+		</script>
+	</head>
+	
+	<body onload="init()">
+		<svg id="svg" xmlns="http://www.w3.org/2000/svg" width="600" height="400"></svg>
+	</body>
+</html>
