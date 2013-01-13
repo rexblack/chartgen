@@ -42,6 +42,7 @@ o Datenstruktur
 		column1: 15.2
 	},
 	]; 
+	(ähnlich yui3-charts)
 		
 o sehr klarer Aufbau
 
@@ -76,7 +77,7 @@ Ticks: Funktion, die die Ticks setzt
 (+) Achsen-Darstellung wird automatisch erzeugt, z.B. werden für die Ticks möglichst runde Werte erzeugt
 (+) Formatierung kann einfach definiert werden, auch für Zeitachsen
 (-) Aber keine Lokalisierung
-(-) Keine Möglichkeit, Überlappung der Labels zu verhindern
+(-) Keine Möglichkeit, Überlappung der Labels zu verhindern (rotation?)
 (-) Keine automatische Beschriftung
 
 (+) Auch Zeitskala möglich, Umrechnung der Werte für Kurve und Achsen-Ticks automatisch

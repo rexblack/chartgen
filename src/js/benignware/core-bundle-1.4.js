@@ -1272,7 +1272,7 @@
 	}
 	
 	ArrayUtils.merge = function(a1, a2) {
-		var result = [];
+		var result = typeof a1 == typeof a2 && typeof a1 == 'object' ? {} : [];
 		for (var i = 0; i < arguments.length; i++) {
 			var a = arguments[i];
 			for (var x in a) {
@@ -2239,28 +2239,38 @@
 	 * @return {Element} the created element.
 	 */
 	Element.create = function(doc, clazz, args) {
-		
-		if (arguments.length == 1) {
-			clazz = arguments[0];
-			doc = document;
+
+		var _doc, _clazz, _args;
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			
+			if (typeof arg == 'object') {
+				if (arg.documentElement) {
+					_doc = arg;
+				} else {
+					_args = arg;
+				}
+			}
+			
+			if (typeof arg == 'string') {
+				var c = Class.getClass(clazz);
+				if (c) {
+					_clazz = c;
+				}
+			}
+			
+			if (typeof arg == 'function') {
+				_clazz = arg;
+			}
+			
 		}
 		
-		if (arguments.length == 0) {
-			clazz = Element;
-			doc = document;
-		}
+		doc = _doc || document;
+		clazz = _clazz || Element;
+		args = _args || {}
 
 		// 
 		var tagName = "div";
-		
-		if (typeof(clazz) == "string") {
-			var c = Class.getClass(clazz);
-			if (c) {
-				clazz = c;
-			} else {
-				tagName = clazz;
-			}
-		}
 		
 		if (typeof(clazz) == "function" && clazz.prototype.tagName) {
 			tagName = clazz.prototype.tagName;
@@ -2434,13 +2444,13 @@
 	
 	
 	/**
-	 * returns dataset object
+	 * returns data attributes as object
 	 * @static
-	 * @method getDataset
+	 * @method getDataAttributeSet
 	 * @param {Element} elem
+	 * @return {Object} an object containing keys and values.
 	 */
-	Element.getDataset = function(element) {
-		
+	Element.getDataAttributeSet = function(element) {
 		
 		var dataset = {}
 		var attributes = element.attributes;
@@ -4507,6 +4517,7 @@
 	var Class = benignware.core.Class;
 	var Event = Class.require('benignware.core.Event');
 	var Element = Class.require('benignware.core.Element');
+	var ArrayUtils = Class.require('benignware.util.ArrayUtils');
 	var StringUtils = Class.require('benignware.util.StringUtils');
 	var CSS = Class.require('benignware.util.CSS');
 	
@@ -4524,7 +4535,8 @@
 	 * @extends benignware.core.Element
 	 */
 	
-	function Component() {
+	function Component(options) {
+		
 		
 		// call the parent constructor
 		var __parent = _parent.apply(this, arguments);
@@ -4594,9 +4606,10 @@
 	 * @protected
 	 * @method _construct
 	 */
-	Component.prototype.__construct = function() {
+	Component.prototype.__construct = function(options) {
 		
-//		console.log("Component::__construct(", arguments, ")", this);
+		options = options || {}
+		options = ArrayUtils.merge(Element.getDataAttributeSet(this), options);
 
 		// setup component css selectors
 		initCSSNames.call(this);
@@ -4637,9 +4650,9 @@
 		this._createChildren();
 
 //		// init dataset
-		var dataset = Element.getDataset(this);
-		for (var x in dataset) {
-			Class.callSetter(this, x, dataset[x]);
+		
+		for (var x in options) {
+			Class.callSetter(this, x, options[x]);
 		}
 		
 		// init options
@@ -4671,7 +4684,7 @@
 	 * @protected
 	 * @method initialize
 	 */
-	Component.prototype._initialize = function(options) {
+	Component.prototype._initialize = function() {
 //		console.log("Component::_initialize(", options, ")");
 	}
 	

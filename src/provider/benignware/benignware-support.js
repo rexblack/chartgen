@@ -37,43 +37,43 @@
 		
 			case 'line': 
 				
-				chartObj = Element.initialize(element, LineChart, options);
+				chartObj = Element.initialize(element, LineChart, [options]);
 				break;
 				
 			case 'column': 
 				
-				chartObj = Element.initialize(element, ColumnChart, options);
+				chartObj = Element.initialize(element, ColumnChart, [options]);
 				break;
 				
 			case 'bar': 
 				
-				chartObj = Element.initialize(element, BarChart, options);
+				chartObj = Element.initialize(element, BarChart, [options]);
 				
 				break;
 				
 			case 'pie': 
 				
-				chartObj = Element.initialize(element, PieChart, options);
+				chartObj = Element.initialize(element, PieChart, [options]);
 				break;
 				
 			case 'table': 
 				
-				chartObj = Element.initialize(element, TableChart, options);
+				chartObj = Element.initialize(element, TableChart, [options]);
 				break;
 		
 		}
 		
-		chartObj.setDataTable(options.dataTable);
-		chartObj.setTitle(options.title);
-		if (chartObj.setLegend) {
-			chartObj.setLegend(options.legend);
-		}
-		if (chartObj.setSeriesColors) {
-			chartObj.setSeriesColors(options.seriesColors);
-		}
-		if (chartObj.setSmooth) {
-			chartObj.setSmooth(options.smooth);
-		}
+//		chartObj.setDataTable(options.dataTable);
+//		chartObj.setTitle(options.title);
+//		if (chartObj.setLegend) {
+//			chartObj.setLegend(options.legend);
+//		}
+//		if (chartObj.setSeriesColors) {
+//			chartObj.setSeriesColors(options.seriesColors);
+//		}
+//		if (chartObj.setSmooth) {
+//			chartObj.setSmooth(options.smooth);
+//		}
 		
 		if (!chartObj) {
 			throw 'Chart-type is not supported';
